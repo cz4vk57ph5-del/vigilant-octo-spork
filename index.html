@@ -1,0 +1,714 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000">
+<title>Giro in arrivo</title>
+<style>
+:root{color-scheme:dark;--g:#22c55e;--r:#ef4444;--o:#f59e0b;--y:#facc15;--mu:#a7adb7;--ln:#2e333b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#fff;margin:0}
+body{font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;-webkit-text-size-adjust:100%;padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px,env(safe-area-inset-left))}
+main{max-width:760px;margin:0 auto;padding:14px 0 36px}
+h1{font-size:1.2rem;margin:0 0 4px}
+h2{font-size:.95rem;margin:18px 0 8px}
+.sub{font-size:.8rem;color:var(--mu);margin:0 0 10px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 14px;margin:12px 0 14px}
+.bar label{display:flex;flex-direction:column;gap:4px;font-size:.74rem;color:var(--mu);min-width:0;flex:1 1 150px}
+select,button.s{font:inherit;font-size:.9rem;color:#fff;background:#000;border:1px solid #fff;border-radius:10px;padding:8px 10px;min-height:42px;width:100%;max-width:100%}
+button.s{cursor:pointer}
+button.s.on{border-color:var(--g);color:var(--g)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 12px}
+.btns button{flex:1 1 220px}
+.card{border:1px solid #fff;border-radius:16px;padding:16px 16px 14px;background:#070707}
+.card.sol.zl{border-color:var(--g)} .card.sol.zs{border-color:var(--r)}
+.card.fra{border-color:var(--y)}
+.card.pre{border-color:var(--o);background:#1f1404}
+.card.gira{border-width:2px;animation:pulsa 1.1s ease-in-out infinite}
+.card.gira.zl{border-color:var(--g);background:#062a14} .card.gira.zs{border-color:var(--r);background:#2c0909}
+@keyframes pulsa{50%{box-shadow:0 0 0 6px rgba(255,255,255,.08)}}
+@media (prefers-reduced-motion:reduce){.card.gira{animation:none}}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+.big{font-size:clamp(1.5rem,7.5vw,2.6rem);font-weight:800;line-height:1.08;letter-spacing:-.01em}
+.card.none .big{color:#d4d7dc}
+.card.sol.zl .big,.card.gira.zl .big{color:var(--g)} .card.sol.zs .big,.card.gira.zs .big{color:var(--r)}
+.card.pre .big{color:var(--o)} .card.fra .big{color:var(--y)}
+.badge{font-size:clamp(1rem,4.6vw,1.45rem);font-weight:800;font-variant-numeric:tabular-nums;padding:4px 12px;border-radius:999px;background:#222;color:#fff;white-space:nowrap}
+.badge:empty{display:none}
+.card.pre .badge{background:var(--o);color:#000} .card.gira .badge{background:#fff;color:#000}
+.card.vecchio .big,.card.vecchio .gauge{opacity:.45} .card.vecchio{border-style:dashed}
+.op{margin:12px 0 0;border:2px solid #4b5563;border-radius:16px;padding:12px 16px 12px;background:#070707}
+.op .oph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.78rem;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.op .opda{text-transform:none;letter-spacing:0;font-variant-numeric:tabular-nums;color:#e5e7eb;font-size:.84rem}
+.op .opbig{font-size:clamp(1.35rem,6.4vw,2.1rem);font-weight:800;line-height:1.1;margin:6px 0 6px;letter-spacing:-.01em}
+.op .opwhy{margin:0 0 6px;font-size:.92rem}
+.op .opreg{margin:0;font-size:.72rem;color:var(--mu)}
+.op.dentro.zl{border-color:var(--g)} .op.dentro.zl .opbig{color:var(--g)} .op.dentro.zs{border-color:var(--r)} .op.dentro.zs .opbig{color:var(--r)}
+.op.prepEsci{border-color:var(--o);background:#1f1404} .op.prepEsci .opbig{color:var(--o)}
+.op.esci{border-color:var(--o);background:#2a1503;animation:pulsa 1.1s ease-in-out infinite} .op.esci .opbig{color:#fff}
+.op.prepEntra{border-style:dashed} .op.prepEntra.zl{border-color:var(--g)} .op.prepEntra.zl .opbig{color:var(--g)} .op.prepEntra.zs{border-color:var(--r)} .op.prepEntra.zs .opbig{color:var(--r)}
+.op.entra{animation:pulsa 1.1s ease-in-out infinite} .op.entra.zl{border-color:var(--g);background:#062a14} .op.entra.zs{border-color:var(--r);background:#2c0909} .op.entra .opbig{color:#fff}
+.op.fuori .opbig{color:#d4d7dc}
+.op.vecchio{border-style:dashed} .op.vecchio .opbig{opacity:.45}
+@media (prefers-reduced-motion:reduce){.op.esci,.op.entra{animation:none}}
+.gauge{position:relative;margin:4px 0 22px;height:12px;border-radius:6px;background:linear-gradient(90deg,#7f1d1d 0 20%,var(--o) 20% 40%,var(--y) 40% 60%,#3f4650 60% 100%)}
+.gauge.off{opacity:.25}
+.gauge .gmk{position:absolute;top:-5px;width:4px;height:22px;margin-left:-2px;border-radius:2px;background:#fff;box-shadow:0 0 0 2px #000;transition:left .4s}
+.gauge.off .gmk{display:none}
+.gauge .gl{position:absolute;top:15px;font-size:.66rem;color:var(--mu);transform:translateX(-50%);white-space:nowrap}
+.lines p{margin:0 0 6px;font-size:.92rem}
+.cd{font-size:.9rem;font-variant-numeric:tabular-nums;margin-top:8px;color:#e5e7eb}
+.cd:empty{display:none}
+.latr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin-top:8px;padding:7px 10px;border-radius:10px;border:1px solid var(--ln);background:#0e0f12;font-size:.86rem;font-variant-numeric:tabular-nums;color:#e5e7eb}
+.latr:empty{display:none}
+.latr.on{border-color:#a0a6b0;background:#16181c}
+.latr b{font-weight:800}
+.latr .adx{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-width:0}
+.latr .adx>*{white-space:nowrap}
+.latr .am{position:relative;display:inline-block;width:84px;height:8px;border-radius:4px;background:#2e333b;overflow:hidden}
+.latr .am i{position:absolute;top:0;bottom:0;left:0}
+.latr .am i.f{background:#e5e7eb}
+.latr.on .am i.f{background:#a0a6b0}
+.latr .am i.s{left:40%;width:2px;margin-left:-1px;background:var(--o)}
+.latr small{font-size:.78rem;color:#c9cdd3}
+.dax{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;margin-top:8px;padding:7px 10px;border-radius:10px;border:1px solid var(--ln);background:#0e0f12;font-size:.9rem;font-variant-numeric:tabular-nums;color:#e5e7eb}
+.dax:empty{display:none}
+.dax b{font-weight:800;font-size:1.08rem}
+.dax .dl{font-weight:700}
+.dax small{flex-basis:100%;font-size:.76rem;color:#c9cdd3}
+.dax.prep{border-color:var(--y)} .dax.prep .dl{color:var(--y)}
+.dax.vicina{border-color:var(--o);background:#1f1404} .dax.vicina .dl{color:var(--o)}
+.dax.uscita{border-color:#b91c1c;background:#2c0909} .dax.uscita .dl{color:#fca5a5}
+.ctx{font-size:.8rem;color:var(--mu);margin-top:8px;border-top:1px solid var(--ln);padding-top:8px}
+.ctx:empty{display:none}
+.chart{position:relative;margin:14px 0 6px;border:1px solid var(--ln);border-radius:12px;overflow:hidden;background:#0b0b0c}
+.chart canvas{display:block;width:100%;touch-action:pan-y}
+.tip{position:absolute;top:8px;pointer-events:none;background:rgba(20,22,26,.94);border:1px solid #3a3f47;border-radius:8px;padding:6px 8px;font-size:.74rem;line-height:1.35;max-width:220px}
+.leg{font-size:.74rem;color:var(--mu);margin:0 0 6px}
+.leg i{font-style:normal;font-weight:700}
+.tipi{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.86rem;margin:6px 0 4px}
+.tipi label{display:flex;align-items:center;gap:6px;min-height:32px}
+.tipi input{width:18px;height:18px;accent-color:var(--g)}
+ol{list-style:none;margin:0 0 8px;padding:0;border:1px solid var(--ln);border-radius:12px}
+li{padding:9px 12px;border-top:1px solid var(--ln);font-size:.88rem}
+li:first-child{border-top:0}
+li b{margin-right:6px;font-variant-numeric:tabular-nums}
+li.l{color:#bbf7d0} li.s{color:#fecaca} li.pre{color:#fde68a} li.poss{color:#fed7aa} li.lat{color:#d1d5db;background:#0d0e10}
+li.op{font-weight:600} li.op.esci,li.op.aspetta{color:#fdba74;background:#140c03} li.op.entra{color:#e5e7eb;background:#0b0f0c}
+li i.lt{font-style:normal;font-size:.72rem;font-weight:700;color:#000;background:#a0a6b0;border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+li span{display:block;font-size:.78rem;color:var(--mu)}
+li.vuoto{color:var(--mu)}
+li em{float:right;font-style:normal;font-size:.76rem;font-weight:700;padding:1px 8px;border-radius:999px;background:#333;color:#fff;margin-left:8px}
+li em.si{background:var(--g);color:#000} li em.no{background:#555}
+.stato{font-size:.8rem;margin:16px 0 4px}
+.stato.ok{color:var(--g)} .stato.ritardo,.stato.errore{color:#fbbf24} .stato.attesa,.stato.chiuso{color:var(--mu)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 8px);z-index:9;width:min(560px,calc(100% - 24px));border-radius:14px;padding:12px 40px 12px 14px;background:#111;border:2px solid #fff;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.toast.zl{border-color:var(--g)} .toast.zs{border-color:var(--r)} .toast.pre{border-color:var(--o)} .toast.esci{border-color:var(--o);background:#1f1404}
+.toast b{display:block;font-size:1.02rem;margin-bottom:2px}
+.toast p{margin:0;font-size:.86rem;color:#e5e7eb;white-space:pre-line}
+.toast button{position:absolute;top:6px;right:6px;width:32px;height:32px;border:0;background:transparent;color:#fff;font-size:1.3rem;cursor:pointer}
+[hidden]{display:none!important}
+</style></head><body>
+<div id="toast" class="toast" role="alert" hidden><b id="toastT"></b><p id="toastB"></p><button id="toastX" type="button" aria-label="Chiudi">×</button></div>
+<main>
+<h1>Giro in arrivo</h1>
+<p class="sub">La zona dell'indicatore Pine «Punti 5m» (stessa logica), con i preavvisi prima del giro: possibile giro → in bilico → sta girando → giro confermato. Dist = quanto manca al giro, in punti di prezzo; punti al minuto = quanto veloce va il prezzo, nel verso della zona o verso il giro.</p>
+<div class="bar"><label>Simbolo<select id="sym" aria-label="Simbolo"></select></label><label>Indicatore<select id="rule" aria-label="Indicatore"></select></label><label>Grafico<select id="win" aria-label="Finestra del grafico"></select></label></div>
+<section id="card" class="card none" aria-label="Stato della zona">
+<div class="head"><div id="big" class="big" aria-live="polite" aria-atomic="true">In attesa dei dati</div><div id="badge" class="badge" aria-hidden="true"></div></div>
+<div id="gauge" class="gauge off" aria-hidden="true"><div id="gmk" class="gmk"></div><span class="gl" style="left:10%">girata</span><span class="gl" style="left:20%">giro</span><span class="gl" style="left:40%">½ ATR</span><span class="gl" style="left:60%">1 ATR</span><span class="gl" style="left:96%">2 ATR</span></div>
+<div id="lines" class="lines"></div>
+<div id="cd" class="cd" aria-live="off"></div>
+<div id="latr" class="latr" aria-live="off"></div>
+<div id="dax" class="dax" aria-live="off"></div>
+<div id="ctx" class="ctx"></div>
+</section>
+<section id="op" class="op fuori" aria-label="Cosa fare">
+<div class="oph"><span class="opt">Cosa fare</span><span id="opDa" class="opda" aria-live="off"></span></div>
+<div id="opBig" class="opbig" aria-live="polite" aria-atomic="true">In attesa dei dati</div>
+<p id="opWhy" class="opwhy"></p>
+<p id="opReg" class="opreg"></p>
+</section>
+<div class="chart"><canvas id="ch" role="img" aria-label="Grafico del prezzo con il prezzo d'inversione (i valori sono anche nel riquadro sopra)"></canvas><div id="tip" class="tip" hidden></div></div>
+<p class="leg">Linea <i style="color:#22c55e">verde</i>: la barra da 5 minuti in corso è LONG, se il prezzo scende fin lì gira SHORT · <i style="color:#ef4444">rossa</i>: è SHORT, se sale fin lì gira LONG · fascia <i style="color:#f59e0b">arancio</i>: mezzo ATR dal giro (in bilico) · ▲▼ sta girando (chiari se il mercato è laterale) · △▽ arancio: preavviso in bilico · <i style="color:#f59e0b">×</i> possibile giro · riga tratteggiata: giro confermato · striscia <i style="color:#a0a6b0">grigia</i> in basso: mercato laterale (ADX sotto 20). Tocca il grafico per ora e valori.</p>
+<h2>Avvisi</h2>
+<div class="btns"><button id="avvisi" class="s" type="button">Attiva gli avvisi (suono, voce, notifica, schermo acceso)</button><button id="prova" class="s" type="button">Prova un avviso</button></div>
+<div id="tipi" class="tipi"></div>
+<div class="bar"><label>Avvisa<select id="orari" aria-label="Orari degli avvisi"></select></label></div>
+<h2>Eventi di oggi</h2>
+<ol id="log"></ol>
+<p id="stat" class="sub"></p>
+<p id="stato" class="stato attesa">in attesa dei dati</p>
+<h2>Dati</h2>
+<div class="btns"><button id="csv" class="s" type="button">⬇ Scarica i dati (CSV)</button></div>
+<p id="csvInfo" class="sub" aria-live="polite">Tutti i minuti caricati (fino a 7 giorni): prezzi e, minuto per minuto, zona, dist, punti al minuto, ADX, posizione di «Cosa fare» ed eventi. È il file da mandare quando qualcosa non torna.</p>
+<p class="sub">Come si leggono. <b>Dist</b>: quanto manca al giro, cioè la distanza tra il prezzo e il prezzo d'inversione, in punti di prezzo e in ATR (sotto 1 ATR la zona è fragile, sotto 0,5 in bilico). <b>Punti al minuto</b>: la velocità del prezzo negli ultimi 15 minuti (la retta che segue meglio le chiusure), in punti al minuto: positiva se va nel verso della zona, negativa se va verso il giro. Quando va verso il giro, la pagina stima <b>tra quanti minuti ci arriva</b> a quel ritmo (dist ÷ velocità). <b>Perde forza</b>: zona lontana dal giro (1 ATR o più) ma al ritmo attuale ci arriva entro 30 minuti. <b>Possibile giro</b>: ci arriva entro 15 minuti e il giro è a meno di 1,5 ATR. <b>Distadx</b>: la dist in ATR meno il margine del laterale (1,5 ATR quando l'ADX è sotto 20), cioè quanti ATR restano prima che «Cosa fare» ti faccia uscire, per il giro o per il laterale: 2 o più margine ampio, 1–2 da tenere d'occhio, 0,5–1 preparati, sotto 0,5 uscita vicina, sotto 0 sotto il margine: esci o non entrare. La zona e il giro sono quelli dell'indicatore Pine.</p>
+<p class="sub">Dati: minuti di Yahoo con pre e after market, attraverso il Worker; il minuto in corso si ricalcola a ogni lettura (circa ogni 6 secondi), come TradingView in tempo reale. Sul telefono gli avvisi arrivano solo con la pagina aperta e lo schermo acceso.</p>
+</main>
+<script>(function(){'use strict';
+const K={B:300,P:6,NWIN:300,QWIN:300,QMIN:30,MCAP:20,WIND:2/3,YIN:.75,YOUT:1.1,WARM:100,LEN:14,HSLOPE:1/11,W:180,LVMIN:30,LAG:60,PCT:.10,NSESS:7,GAP:4500,TVW:15,TVN:6};
+const fin=Number.isFinite;
+function makePort(rule,nyDay,opts){ const TEND=!!(opts&&opts.tend), ORIZ=(opts&&opts.oriz)||15, MINC=30, DLO=(opts&&opts.dlo)||30, DHI=(opts&&opts.dhi)||45, DMIN=(opts&&opts.dmin)||15;
+const S={n:0,bH:[],bL:[],bC:[],
+trSum:0,trCnt:0,st:NaN, pSum:0,nSum:0,dmCnt:0,sp:NaN,sn:NaN,
+rSu:0,rSd:0,rCnt:0,up:NaN,dn:NaN,
+tArr:[],hLast:NaN, z:0, prevY:false, stJY:false, stJ:'', ad:[], qw:[], qsCur:NaN,
+curT:null,bHi:NaN,bLo:NaN,bCl:NaN,closedCur:false,bkSum:0,bkCnt:0,
+tPrev:NaN,cPrev:NaN,
+day:null,sPts:[],sAv:[],sWn:[],sT:[],sSv:[],hist60:[],sessLen:[],cnt60:0,thr:NaN,
+nf:0,warnT:null,adx:NaN,dxSum:0,dxCnt:0,spA:NaN,snA:NaN,pASum:0,nASum:0,dmACnt:0,tPrevB:null,qT:[],qC:[],qF:[],cntCat:[0,0,0,0,0],hitCat:[0,0,0,0,0]};
+const lastC=i=>S.bC[S.bC.length-1-i], lastH=i=>S.bH[S.bH.length-1-i], lastL=i=>S.bL[S.bL.length-1-i];
+const dmiProbe=(hi,lo,p)=>{ if(!fin(S.sp)||!fin(S.sn)||!fin(S.st)) return NaN; const h=Math.max(hi,p), l=Math.min(lo,p), cj=lastC(0), tr=Math.max(h-l,Math.abs(h-cj),Math.abs(l-cj)), up=h-lastH(0), dn=lastL(0)-l, pdm=(up>dn&&up>0)?up:0, ndm=(dn>up&&dn>0)?dn:0;
+const a=(S.sp*(K.LEN-1)+pdm)/K.LEN, b=(S.sn*(K.LEN-1)+ndm)/K.LEN, s=(S.st*(K.LEN-1)+tr)/K.LEN; return s>0?(100*a/s)-(100*b/s):NaN; };
+const hullProbe=p=>{ const j=S.n-1; if(j<19) return NaN; const t=S.tArr, L=t.length; if(L<4||!fin(t[L-1])||!fin(t[L-2])||!fin(t[L-3])||!fin(t[L-4])||!fin(S.hLast)) return NaN;
+let a=p*10, b=p*21; for(let i=0;i<9;i++) a+=lastC(i)*(9-i); for(let i=0;i<20;i++) b+=lastC(i)*(20-i); a/=55; b/=231; const tn=2*a-b;
+return ((tn*5+t[L-1]*4+t[L-2]*3+t[L-3]*2+t[L-4]*1)/15)-S.hLast; };
+const probe=(hi,lo,p)=>rule==='dmi'?dmiProbe(hi,lo,p):hullProbe(p);
+const flipPx=(d0,hi,lo,p)=>{ const atr=S.st; if(!(atr>0)||!fin(d0)) return null; if(d0===0) return p; if(rule==='hull'){ const m=Math.min(K.MCAP,Math.abs(d0)/K.HSLOPE/atr); return m<K.MCAP?p-d0/K.HSLOPE:null; }
+const Rr=K.MCAP*atr; let a,b; if(d0>0){ a=p-Rr; b=p; if(!(dmiProbe(hi,lo,a)<0)) return null; } else { a=p; b=p+Rr; if(!(dmiProbe(hi,lo,b)>0)) return null; }
+for(let it=0;it<40;it++){ const mid=(a+b)/2, v=dmiProbe(hi,lo,mid); if(d0>0){ if(v>0) b=mid; else a=mid; } else { if(v<0) a=mid; else b=mid; } } const px=(a+b)/2; return Math.min(K.MCAP,Math.abs(px-p)/atr)<K.MCAP?px:null; };
+const margin=(d0,hi,lo,p)=>{ const atr=S.st; if(!(atr>0)||!fin(d0)) return null; if(d0===0) return 0; if(rule==='hull') return Math.min(K.MCAP,Math.abs(d0)/K.HSLOPE/atr);
+const Rr=K.MCAP*atr; let a,b; if(d0>0){ a=p-Rr; b=p; if(!(dmiProbe(hi,lo,a)<0)) return K.MCAP; } else { a=p; b=p+Rr; if(!(dmiProbe(hi,lo,b)>0)) return K.MCAP; }
+for(let it=0;it<40;it++){ const mid=(a+b)/2, v=dmiProbe(hi,lo,mid); if(d0>0){ if(v>0) b=mid; else a=mid; } else { if(v<0) a=mid; else b=mid; } } return Math.min(K.MCAP,Math.abs((a+b)/2-p)/atr); };
+const rank=x=>{ if(!fin(x)) return null; const a=Math.abs(x); let n=0,c=0; for(const v of S.ad){ if(fin(v)){ n++; if(v<=a) c++; } } return n>=20?c/n:null; };
+const rsiProbe=p=>{ if(!fin(S.up)||!fin(S.dn)) return NaN; const al=1/K.LEN, ch=p-lastC(0), u=al*Math.max(ch,0)+(1-al)*S.up, d=al*(-Math.min(ch,0))+(1-al)*S.dn; return d===0?100:u===0?0:100-100/(1+u/d); };
+const strength=(m,r,q)=>{ const sm=m==null?null:Math.sqrt(Math.min(m,K.MCAP)/K.MCAP); let ind=null; if(r!=null&&sm!=null) ind=(r+sm)/2; else if(r!=null) ind=r; else if(sm!=null) ind=sm; const s=ind==null?q:(q==null?ind:K.WIND*ind+(1-K.WIND)*q); return s==null?null:Math.max(.04,s); };
+function closeBucket(hk,lk,ck,tB){ const n=S.n;
+const tr=n===0?hk-lk:Math.max(hk-lk,Math.abs(hk-lastC(0)),Math.abs(lk-lastC(0)));
+let st=S.st, trSum=S.trSum, trCnt=S.trCnt; if(!fin(st)){ trSum+=tr; trCnt++; if(trCnt===K.LEN) st=trSum/K.LEN; } else st=(st*(K.LEN-1)+tr)/K.LEN;
+let sp=S.sp, sn=S.sn, pSum=S.pSum, nSum=S.nSum, dmCnt=S.dmCnt;
+if(n>=1){ const up=hk-lastH(0), dn=lastL(0)-lk, pdm=(up>dn&&up>0)?up:0, ndm=(dn>up&&dn>0)?dn:0; if(!fin(sp)){ pSum+=pdm; nSum+=ndm; dmCnt++; if(dmCnt===K.LEN){ sp=pSum/K.LEN; sn=nSum/K.LEN; } } else { sp=(sp*(K.LEN-1)+pdm)/K.LEN; sn=(sn*(K.LEN-1)+ndm)/K.LEN; }
+const gapB=S.tPrevB!=null&&tB-S.tPrevB>1800, pA=gapB?0:pdm, nA=gapB?0:ndm; if(!fin(S.spA)){ S.pASum+=pA; S.nASum+=nA; S.dmACnt++; if(S.dmACnt===K.LEN){ S.spA=S.pASum/K.LEN; S.snA=S.nASum/K.LEN; } } else { S.spA=(S.spA*(K.LEN-1)+pA)/K.LEN; S.snA=(S.snA*(K.LEN-1)+nA)/K.LEN; } }
+let upR=S.up, dnR=S.dn, rSu=S.rSu, rSd=S.rSd, rCnt=S.rCnt;
+if(n>=1){ const ch=ck-lastC(0), u=Math.max(ch,0), d=-Math.min(ch,0); if(!fin(upR)){ rSu+=u; rSd+=d; rCnt++; if(rCnt===K.LEN){ upR=rSu/K.LEN; dnR=rSd/K.LEN; } } else { upR=(1/K.LEN)*u+(1-1/K.LEN)*upR; dnR=(1/K.LEN)*d+(1-1/K.LEN)*dnR; } }
+let tk=NaN; if(n>=20){ let a=ck*10, b=ck*21; for(let i=0;i<9;i++) a+=lastC(i)*(9-i); for(let i=0;i<20;i++) b+=lastC(i)*(20-i); tk=2*(a/55)-(b/231); }
+const tA=S.tArr.concat([tk]).slice(-5); let hk2=NaN; if(tA.length===5&&tA.every(fin)) hk2=(tA[4]*5+tA[3]*4+tA[2]*3+tA[1]*2+tA[0])/15;
+let dk=NaN; if(rule==='dmi'){ if(fin(sp)&&fin(sn)&&fin(st)&&st>0) dk=100*sp/st-100*sn/st; } else { if(fin(hk2)&&fin(S.hLast)) dk=hk2-S.hLast; }
+const m=(fin(dk)&&n>=2)?margin(dk,hk,lk,ck):null;
+const z=dk>0?1:dk<0?-1:S.z;
+let stK=''; if(z!==0&&n>=1){ const Y=m!=null&&(m<K.YIN||(S.prevY&&m<K.YOUT)); S.prevY=Y; stK=Y?'Y':(z>0?'G':'R'); }
+if(n>=1){ S.qw.push(Math.abs(ck-lastC(0))); if(S.qw.length>K.QWIN) S.qw.shift(); }
+S.bH.push(hk); S.bL.push(lk); S.bC.push(ck); if(S.bC.length>320){ S.bH.shift(); S.bL.shift(); S.bC.shift(); }
+S.ad.push(fin(dk)?Math.abs(dk):NaN); if(S.ad.length>K.NWIN) S.ad.shift();
+S.tPrevB=tB;
+if(fin(S.spA)&&fin(S.snA)){ const dx=(S.spA+S.snA)>0?100*Math.abs(S.spA-S.snA)/(S.spA+S.snA):0; if(!fin(S.adx)){ S.dxSum+=dx; S.dxCnt++; if(S.dxCnt===K.LEN) S.adx=S.dxSum/K.LEN; } else S.adx=(S.adx*(K.LEN-1)+dx)/K.LEN; }
+S.st=st; S.trSum=trSum; S.trCnt=trCnt; S.sp=sp; S.sn=sn; S.pSum=pSum; S.nSum=nSum; S.dmCnt=dmCnt; S.up=upR; S.dn=dnR; S.rSu=rSu; S.rSd=rSd; S.rCnt=rCnt;
+S.tArr=tA; S.hLast=hk2; if(S.z!==0&&z!==S.z) S.nf++; S.z=z; S.stJ=stK; S.stJY=stK==='Y';
+if(S.qw.length>=K.QMIN){ const srt=S.qw.slice().sort((x,y)=>x-y); S.qsCur=Math.max(1e-9,srt[Math.min(srt.length-1,Math.floor(.9*srt.length))]); } else S.qsCur=NaN;
+S.n=n+1; return {d:dk,m,z,state:stK}; }
+function onMinute(t,h,l,c){ const out={t,sample:false}; const nuovoG=S.day===null||nyDay(t)!==S.day;
+const Tb=Math.floor(t/K.B)*K.B;
+if(S.curT!==null&&Tb!==S.curT&&!S.closedCur) closeBucket(S.bHi,S.bLo,S.bCl,S.curT);
+if(S.curT===null||Tb!==S.curT){ S.curT=Tb; S.bHi=h; S.bLo=l; S.closedCur=false; S.bkSum=0; S.bkCnt=0; } else { S.bHi=Math.max(S.bHi,h); S.bLo=Math.min(S.bLo,l); }
+S.bCl=c;
+const dt=t-S.tPrev, cp=dt>K.B?NaN:S.cPrev;
+if(TEND){ const dE=nyDay(t); if(S.eDay!==dE){ S.eDay=dE; S.vb=[]; } S.vb.push([t,c]); while(S.vb.length&&S.vb[0][0]<t-K.TVW*60) S.vb.shift(); }
+if(S.n>=1&&S.n>=K.WARM&&fin(S.tPrev)){ const d1=probe(S.bHi,S.bLo,c);
+if(fin(d1)&&d1!==0){ const m=margin(d1,S.bHi,S.bLo,c), r=rank(d1), sc=S.qsCur, f=Math.max(.05,Math.min(1,Math.sqrt(Math.max(5,dt)/K.B))), q0=(fin(sc)&&fin(cp))?Math.min(1,Math.abs(c-cp)/(sc*f)):null;
+const zT=S.z!==0?S.z:(d1>0?1:-1), q=q0, s=strength(m,r,q);
+let vT=null; if(TEND&&S.vb.length>=K.TVN){ const n=S.vb.length; let mx=0,my=0; for(const [tt,cc] of S.vb){ mx+=tt/60; my+=cc; } mx/=n; my/=n; let sxy=0,sxx=0; for(const [tt,cc] of S.vb){ sxy+=(tt/60-mx)*(cc-my); sxx+=(tt/60-mx)**2; } if(sxx>0) vT=zT*sxy/sxx; }
+if(s!=null){ const g=d1>0, rs=rsiProbe(c), cb=lastC(K.P-1), dp=c-cb, eps=c*.0002; let pts=null, lev=null;
+if(fin(rs)&&fin(dp)){ const rOK=g?rs>50:rs<50, pOK=g?dp>eps:dp<-eps, pAg=g?dp<-eps:dp>eps; lev=pOK?(rOK?'3':'2p'):(pAg?'0':'1');
+if(S.z!==0) pts=(g!==(S.z>0))?-100:(lev==='3'?100:0); }
+const Y=m!=null&&(m<K.YIN||(S.stJY&&m<K.YOUT));
+const fpx=flipPx(d1,S.bHi,S.bLo,c); let flipOk=null; if(fpx!=null&&rule==='dmi'){ const dd=1e-4*S.st; const lo1=dmiProbe(S.bHi,S.bLo,fpx-dd), hi1=dmiProbe(S.bHi,S.bLo,fpx+dd); flipOk=(lo1<0&&hi1>0); } else if(fpx!=null){ flipOk=Math.abs(hullProbe(fpx))<1e-9; }
+Object.assign(out,{sample:true,k:S.n,s,m,r,q,d:d1,g,lev,pts,state:Y?'Y':(g?'G':'R'),envZ:S.z,envY:S.stJY,fpx,flipOk,atr:S.st,v:vT});
+if(pts!=null){ S.bkSum+=pts; S.bkCnt++; } out.bkAvg=S.bkCnt?S.bkSum/S.bkCnt:null;
+sessionLayer(out);
+if(pts!=null&&m!=null&&S.z!==0){ const mz=(g===(S.z>0))?m:-m; const cat=mz<0?0:mz<.5?1:mz<1?2:((TEND?(vT!=null&&vT>0):out.p10>=30)?3:4), nC=S.cntCat[cat]; out.cat=cat; out.nCasi=nC; out.pGiro=nC>=MINC?S.hitCat[cat]/nC:null; out.primoGiro=cat===0&&S.warnT!==Tb; if(out.primoGiro) S.warnT=Tb; out.mz=mz;
+if(TEND&&S.st>0){ out.dP=mz*S.st; out.tau=out.dP<=0?0:(vT!=null&&vT<0?out.dP/(-vT):null); } } } } }
+out.nfSmp=S.nf;
+S.tPrev=t; S.cPrev=c;
+if(t-Tb===K.B-60){ closeBucket(S.bHi,S.bLo,S.bCl,S.curT); S.closedCur=true; }
+while(S.qT.length&&S.qT[0]<=t-ORIZ*60){ const t0=S.qT.shift(), c0=S.qC.shift(), f0=S.qF.shift(); if(t-t0<=ORIZ*60+120){ S.cntCat[c0]++; if(S.nf-f0>0) S.hitCat[c0]++; } }
+if(out.cat!=null){ S.qT.push(t); S.qC.push(out.cat); S.qF.push(out.nfSmp); }
+if(nuovoG) S.dLow=false; out.risale=false; out.durLow=null; out.zPrima=0;
+if(out.sample&&out.d5!=null){ if(!S.dLow&&out.d5<DLO){ S.dLow=true; S.dLowT=t; S.dLowZ=S.z; } else if(S.dLow&&out.d5>=DHI){ out.durLow=(t-S.dLowT)/60; out.zPrima=S.dLowZ; out.risale=out.durLow>=DMIN&&S.z!==0; S.dLow=false; } }
+out.dLow=!!S.dLow; out.zFine=S.z;
+{ const dk=nyDay(t), h=S.h5||(S.h5=[]); h.push({d5:out.sample&&out.d5!=null?out.d5:null,av:out.sample&&out.av!=null?out.av:null,day:dk}); if(h.length>6) h.shift(); const p=h.length===6?h[0]:null; out.dTr=(out.sample&&out.d5!=null&&p&&p.d5!=null&&p.day===dk)?out.d5-p.d5:null; out.aR=(out.sample&&out.av!=null&&p&&p.av!=null&&p.day===dk)?Math.round(out.av-p.av):null; }
+{ if(!S.cntG){ S.cntG=[0,0,0]; S.lungG=[0,0,0]; S.rTm=null; S.eT=null; } const dRr=out.dTr==null?null:Math.round(out.dTr), distSu=dRr!=null&&dRr>=4, dk2=nyDay(t); out.grado=null;
+if(S.eT!=null){ if(nuovoG) S.eT=null; else if(t-S.eT>=1800){ S.cntG[S.eG]++; S.lungG[S.eG]++; S.eT=null; } else if(S.dLow){ S.cntG[S.eG]++; S.eT=null; } }
+if(out.risale){ S.rTm=t; S.rPx=c; S.rZn=S.z; S.rDay=dk2; }
+else if(S.rTm!=null){ if(S.dLow||dk2!==S.rDay) S.rTm=null; else if(t-S.rTm>=300&&out.sample&&S.st>0){ out.progr=(c-S.rPx)*S.rZn/S.st; out.grado=(distSu?1:0)+(out.progr>0?1:0); out.gZ=S.rZn; out.gT=S.rTm; S.eT=S.rTm; S.eG=out.grado; S.rTm=null; } } }
+out.dR=out.dTr==null?null:Math.round(out.dTr);
+return out; }
+function sessionLayer(o){ const day=nyDay(o.t);
+if(day!==S.day){ if(S.day!==null) S.sessLen.push(S.cnt60); S.cnt60=0; S.day=day; S.sPts=[]; S.sAv=[]; S.sWn=[]; S.sT=[]; S.sSv=[];
+while(S.sessLen.length>K.NSESS){ const cut=S.sessLen.shift(); S.hist60.splice(0,cut); }
+if(S.hist60.length>=100){ const srt=S.hist60.slice().sort((a,b)=>a-b); S.thr=srt[Math.floor(K.PCT*(srt.length-1))]; } else S.thr=NaN; }
+const L=S.sPts.length, w0=Math.max(0,L-(K.W-1)); let sum=0,cnt=0; for(let q=w0;q<L;q++){ const v=S.sPts[q]; if(v!=null){ sum+=v; cnt++; } } if(o.pts!=null){ sum+=o.pts; cnt++; }
+const av=cnt?sum/cnt:0, wn=(L-w0)+1;
+let t10=0,c10=0; for(let q=Math.max(0,L-9);q<L;q++){ const v=S.sPts[q]; if(v!=null){ t10+=v; c10++; } } if(o.pts!=null){ t10+=o.pts; c10++; } o.p10=c10?t10/c10:0; { let t5=o.s, c5=1; for(let q=Math.max(0,L-4);q<L;q++){ t5+=S.sSv[q]; c5++; } o.d5=t5/c5*100; }
+const ref=[]; for(let q=w0;q<L;q++) if(S.sWn[q]>=K.LVMIN) ref.push(S.sAv[q]); if(wn>=K.LVMIN) ref.push(av);
+let pc=null, lvl='na'; if(ref.length>=K.LVMIN){ let lt=0,eq=0; for(const v of ref){ if(v<av-1e-9) lt++; else if(v<=av+1e-9) eq++; } pc=(lt+eq/2)/ref.length*100; lvl=pc<=25?'lo':pc>=75?'hi':'md'; }
+let d60=null; if(L>=K.LAG){ const q=L-K.LAG; if(o.t-S.sT[q]<=K.GAP&&S.sWn[q]>=K.LVMIN) d60=av-S.sAv[q]; }
+const strong=d60!=null&&fin(S.thr)&&d60<=S.thr;
+S.sPts.push(o.pts); S.sAv.push(av); S.sWn.push(wn); S.sT.push(o.t); S.sSv.push(o.s); if(d60!=null){ S.hist60.push(d60); S.cnt60++; }
+Object.assign(o,{av,wn,pc,lvl,d60,thr:S.thr,strong}); }
+return {onMinute,S}; }
+window.PINE={K,makePort};
+})();</script>
+<script>(function(){
+'use strict';
+const $=id=>document.getElementById(id), fin=Number.isFinite, PINE=window.PINE, K=PINE.K;
+const WORKER='https://yahooproxy.b864v27974.workers.dev';
+const SYMS={'SPY':'SPY · ETF S&P 500 (4:00–20:00 di New York)','ES=F':'Future S&P 500 (quasi 24 ore; su Yahoo può essere in ritardo)','QQQ':'QQQ · ETF Nasdaq 100','NQ=F':'Future Nasdaq 100 (quasi 24 ore; può essere in ritardo)'};
+const RULES={dmi:'DMI',hull:'Hull'}, WINS={'60':'1 ora','120':'2 ore','240':'4 ore'};
+const ORARI={rth:'solo in seduta (9:30–16:00 di New York)',ext:'4:00–20:00 di New York',sempre:'a tutte le ore'};
+const TIPI={poss:'Possibile giro',pre:'In bilico',gira:'Sta girando',giro:'Giro confermato',lat:'Mercato laterale (inizio e fine)',op:'Cosa fare: entra ed esci'};
+const PRIO={op:6,giro:5,gira:4,pre:3,poss:2,lat:1};
+const OP_ATR=1.5, OP_AVV=2, OP_PRIMA=5;
+const ADX_LAT=20, PG_TAU=15, PG_ATR=1.5, PF_TAU=30, PRE_RIARMO=0.75, FRESH=300, SETTLE=66, RSNAP=20, FULL_GAP=6*3600;
+const VERSIONE='2.1', PORT_OPTS={tend:true};
+const MAXM=(typeof window.__GIRO_MAXM==='number'&&window.__GIRO_MAXM>=800)?window.__GIRO_MAXM:12000, MAXH=Math.max(20,Math.round(MAXM*.025));
+const LSO=(()=>{ try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return localStorage; }catch(e){ return null; } })();
+const lsGet=k=>{ try{ return LSO?LSO.getItem(k):null; }catch(e){ return null; } }, lsSet=(k,v)=>{ try{ if(LSO) LSO.setItem(k,String(v)); }catch(e){} };
+const lsList=k=>{ try{ const a=JSON.parse(lsGet(k)||'[]'); return Array.isArray(a)?a.filter(x=>typeof x==='string'):[]; }catch(e){ return []; } };
+const tipiSalvati=(()=>{ try{ const a=JSON.parse(lsGet('giro|tipi')||'null'); if(!Array.isArray(a)) return null; const b=a.filter(k=>TIPI[k]); const v=lsGet('giro|tipiV'); if(v!=='2'&&v!=='3'&&!b.includes('lat')) b.push('lat'); if(v!=='3'&&b.length&&!b.includes('op')) b.push('op'); return b; }catch(e){ return null; } })();
+lsSet('giro|tipiV','3');
+const ST={sym:(v=>SYMS[v]?v:'SPY')(lsGet('giro|sym')), rule:(v=>RULES[v]?v:'dmi')(lsGet('giro|rule')), win:(v=>WINS[v]?+v:120)(lsGet('giro|win')),
+orari:(v=>ORARI[v]?v:'ext')(lsGet('giro|orari')), tipi:new Set(tipiSalvati||Object.keys(TIPI)), voce:lsGet('giro|voce')!=='0'};
+const F={gen:0,bars:new Map(),full:false,fullAt:0,busy:false,timer:0,conn:'attesa',err:'',calcErr:'',fails:0,acs:new Set(),maxFly:0,lag:0,lagN:0,obs:[],histT:0,seq:0,op:null,opHist:0,
+P:null,Pkey:'',done:[],ser:[],snaps:[],live:null,lastBarT:0,lastMin:0,minT:0,loaded:false,ev:[],M:null,stat:null,hover:null,nFull:0,nRoll:0,seen:new Set()};
+const AV={on:false,ac:null,wake:null,notif:false,notifNo:'',flash:null,toastT:0};
+const nf2=new Intl.NumberFormat('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+const px=n=>fin(n)?nf2.format(n):'—', atr=n=>fin(n)?Math.abs(n).toFixed(2).replace('.',','):'—';
+const sgn=(n,d)=>{ if(!fin(n)) return '—'; const s=Math.abs(n).toFixed(d||0).replace('.',','); return (+Math.abs(n).toFixed(d||0)===0?'±':n<0?'−':'+')+s; };
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hmf=new Intl.DateTimeFormat('it-IT',{hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'Europe/Rome'}), hm=t=>fin(t)?hmf.format(new Date(t*1000)):'—';
+const nyhm=new Intl.DateTimeFormat('it-IT',{hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'America/New_York'});
+const nyf=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}), etMemo=new Map();
+function et(t){ let v=etMemo.get(t); if(!v){ const p={}; for(const x of nyf.formatToParts(new Date(t*1000))) p[x.type]=x.value; v={day:p.year+'-'+p.month+'-'+p.day,mod:(+p.hour%24)*60+(+p.minute),wd:p.weekday}; if(etMemo.size>30000) etMemo.clear(); etMemo.set(t,v); } return v; }
+const nyDay=t=>et(t).day;
+const fAdx=a=>fin(a)?a.toFixed(1).replace('.',','):'—';
+const V_FERMO=0.02;
+const fv=v=>fin(v)?sgn(v,2):'—', OP_ATR_T=atr(OP_ATR)+' ATR', vVerso=v=>!fin(v)?'':v>V_FERMO?'nel verso della zona':v<-V_FERMO?'verso il giro':'quasi fermo';
+const DAX_F=[[2,'ampio','margine ampio: lascia correre'],[1,'occhio','da tenere d\'occhio'],[0.5,'prep','preparati'],[0,'vicina','uscita vicina'],[-Infinity,'uscita','sotto il margine: esci o non entrare']];
+const daxOf=e=>e&&fin(e.mz)&&e.adx!=null?e.mz-(e.adx<ADX_LAT?OP_ATR:0):null, f2=v=>Math.abs(v)<0.005?'0,00':(v<0?'−':'')+Math.abs(v).toFixed(2).replace('.',','), daxBanda=d=>DAX_F.find(x=>d>=x[0]);
+const distSotto=mz=>mz!=null&&mz<0?'la barra da 5 minuti già oltre il giro':'dist '+atr(mz)+' ATR, sotto '+OP_ATR_T;
+const dTxt=e=>!e||!fin(e.dP)?'—':e.dP<0?'giro già superato di '+px(-e.dP)+' punti':px(e.dP)+' punti ('+atr(e.mz)+' ATR)';
+const tTxt=e=>!e?'':e.tau===0?'la barra in corso ha già superato il giro':fin(e.tau)&&e.tau<=90?'al ritmo attuale il giro arriva tra circa '+Math.max(1,Math.round(e.tau))+' min':fin(e.v)&&e.v>V_FERMO?'il prezzo si allontana dal giro':fin(e.v)?'il prezzo è quasi fermo':'';
+const zTxt=z=>z>0?'LONG':'SHORT', zArr=z=>z>0?'▲':'▼', mmss=s=>{ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
+const LETT=['sta girando','in bilico','fragile','solido, il prezzo va nel verso della zona','solido, il prezzo è fermo o va verso il giro'];
+const perdeForza=e=>!!e&&e.cat!=null&&e.cat>=3&&fin(e.tau)&&e.tau<=PF_TAU, lett=e=>perdeForza(e)?'perde forza: lontana dal giro, ma al ritmo attuale ci arriva tra circa '+Math.max(1,Math.round(e.tau))+' min':LETT[e.cat];
+const HOL=new Set(['2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
+const EARLY=new Set(['2026-11-27','2026-12-24','2027-11-26']);
+const fineRth=d=>EARLY.has(d)?780:960, fineExt=d=>EARLY.has(d)?1020:1200;
+const giornoBorsa=t=>{ const q=et(Math.floor(t/60)*60); return q.wd!=='Sat'&&q.wd!=='Sun'&&!HOL.has(q.day); };
+const isFut=()=>/=F$/.test(ST.sym);
+function marketOpen(now){ const q=et(Math.floor(now/60)*60), m=q.mod;
+if(isFut()){ if(q.wd==='Sat') return false; if(q.wd==='Sun') return m>=1080; if(q.wd==='Fri') return m<1020; return !(m>=1020&&m<1080); }
+if(q.wd==='Sat'||q.wd==='Sun'||HOL.has(q.day)) return false; return m>=240&&m<fineExt(q.day); }
+function inOrari(t){ if(ST.orari==='sempre') return true; const q=et(Math.floor(t/60)*60), m=q.mod; return ST.orari==='rth'?(m>=570&&m<fineRth(q.day)):(m>=240&&m<fineExt(q.day)); }
+const ritardo=now=>F.lastBarT?Math.max(0,Math.floor((now-F.lastBarT)/60)):null;
+function freshness(){ const now=Date.now()/1000; if(F.calcErr) return {k:'errore',t:'errore nel calcolo, si rifà da capo alla prossima lettura: '+F.calcErr};
+if(F.conn==='errore') return {k:'errore',t:'dati non disponibili: '+F.err};
+if(F.conn!=='ok'||!F.lastBarT) return {k:'attesa',t:'sto scaricando i minuti di '+ST.sym+'…'};
+if(!marketOpen(now)) return {k:'chiuso',t:'mercato chiuso · ultimo minuto '+hm(F.lastBarT)};
+const r=ritardo(now); return r<=1?{k:'ok',t:'dati in tempo reale · ultimo minuto '+hm(F.lastBarT)}:{k:'ritardo',t:'dati in ritardo di '+r+' minuti: anche gli avvisi arrivano in ritardo'}; }
+function nextDelay(){ const now=Date.now()/1000; if(!marketOpen(now)) return 120; return document.visibilityState==='hidden'?15:6; }
+async function get(range){ const ac=new AbortController(), to=setTimeout(()=>ac.abort(),25000); F.acs.add(ac); F.maxFly=Math.max(F.maxFly,F.acs.size); const at0=Date.now()/1000, seq=++F.seq;
+try{ const url=WORKER+'?symbol='+encodeURIComponent(ST.sym)+'&interval=1m&range='+range+'&includePrePost=true&_='+Date.now(); let r;
+try{ r=await fetch(url,{signal:ac.signal,cache:'no-store'}); }catch(x){ throw Object.assign(new Error(ac.signal.aborted?'il Worker non ha risposto in 25 secondi':'Worker non raggiungibile (rete o CORS)'),{kind:'network'}); }
+if(r.status===429) throw Object.assign(new Error('troppe richieste (HTTP 429)'),{kind:'rate',retry:+r.headers.get('retry-after')||0});
+if(!r.ok) throw Object.assign(new Error('il Worker ha risposto HTTP '+r.status),{kind:'http'});
+let j; try{ j=await r.json(); }catch(x){ throw Object.assign(new Error(ac.signal.aborted?'il Worker non ha finito di rispondere in 25 secondi':'risposta non JSON'),{kind:ac.signal.aborted?'network':'json'}); }
+const pr=parseYahoo(j,ST.sym); if(!pr.ok) throw Object.assign(new Error(pr.msg),{kind:pr.code}); pr.at=at0; pr.seq=seq; return pr;
+} finally{ clearTimeout(to); F.acs.delete(ac); } }
+function parseYahoo(j,sym){ const E=(code,msg)=>({ok:false,code,msg});
+if(j==null||typeof j!=='object'||Array.isArray(j)) return E('malformed','la risposta non è un oggetto JSON');
+const ch=j.chart; if(ch==null||typeof ch!=='object') return E('malformed','risposta senza «chart»');
+if(ch.error) return E('provider','Yahoo segnala un errore: '+String(ch.error.description||ch.error.code||'sconosciuto').slice(0,160));
+const res=Array.isArray(ch.result)?ch.result[0]:null; if(!res||typeof res!=='object') return E('empty','nessun risultato per '+sym);
+const meta=res.meta&&typeof res.meta==='object'?res.meta:{};
+if(meta.symbol&&String(meta.symbol).toUpperCase()!==sym.toUpperCase()) return E('symbol','simbolo restituito «'+meta.symbol+'» invece di «'+sym+'»');
+if(meta.dataGranularity&&String(meta.dataGranularity).toLowerCase()!=='1m') return E('interval','granularità «'+meta.dataGranularity+'» invece di 1 minuto');
+const ts=res.timestamp; if(!Array.isArray(ts)||!ts.length) return E('empty','nessun minuto nell\'intervallo (mercato chiuso?)');
+const q=res.indicators&&Array.isArray(res.indicators.quote)?res.indicators.quote[0]:null; if(!q||typeof q!=='object') return E('malformed','manca «indicators.quote»');
+for(const f of ['open','close']) if(!Array.isArray(q[f])||q[f].length!==ts.length) return E('length','serie «'+f+'» non allineata ai minuti');
+const num=x=>typeof x==='number'&&fin(x)&&x>0?x:null, qh=Array.isArray(q.high)&&q.high.length===ts.length?q.high:null, ql=Array.isArray(q.low)&&q.low.length===ts.length?q.low:null, g=new Map();
+for(let i=0;i<ts.length;i++){ const t0=ts[i]; if(typeof t0!=='number'||!fin(t0)||t0<=0) continue; const c=num(q.close[i]); if(c==null) continue;
+const t=Math.floor(t0/60)*60, o=num(q.open[i])||c, hi=qh?num(qh[i]):null, lo=ql?num(ql[i]):null, h=Math.max(hi||c,o,c), l=Math.min(lo||c,o,c), x=g.get(t);
+if(!x) g.set(t,{t,o,h,l,c,t1:t0,t2:t0});
+else { if(t0<x.t1){ x.o=o; x.t1=t0; } if(t0>=x.t2){ x.c=c; x.t2=t0; } x.h=Math.max(x.h,h); x.l=Math.min(x.l,l); } }
+const bars=[...g.values()].sort((a,b)=>a.t-b.t).map(x=>({t:x.t,o:x.o,h:Math.max(x.h,x.o,x.c),l:Math.min(x.l,x.o,x.c),c:x.c}));
+return bars.length?{ok:true,bars}:E('empty','nessun minuto valido'); }
+function merge(pr){ let lastT=-Infinity; for(const b of pr.bars) if(b.t>lastT) lastT=b.t;
+const lb=pr.bars[pr.bars.length-1], pv=F.bars.get(lastT);
+const vivo=F.lastBarT>0&&(lastT>F.lastBarT||(lastT===F.lastBarT&&!!pv&&pr.seq>pv.seq&&lb.h>=pv.h&&lb.l<=pv.l&&(lb.c!==pv.c||lb.h!==pv.h||lb.l!==pv.l||lb.o!==pv.o)));
+if(vivo) F.obs.push({at:pr.at,lag:pr.at-lastT,nuovo:lastT>F.lastBarT}); F.obs=F.obs.filter(x=>pr.at-x.at<=600);
+const lagDi=a=>a.length?Math.max(0,Math.min(1800,Math.min(...a.map(x=>x.lag)))):0;
+F.lag=lagDi(F.obs); F.lagN=lagDi(F.obs.filter(x=>x.nuovo));
+const ora=pr.at-F.lag, aperto=marketOpen(pr.at);
+for(const b of pr.bars){ if(b.t<F.minT) continue; const old=F.bars.get(b.t); if(old&&old.seq>pr.seq) continue;
+const inCorso=b.t===lastT&&(ora<b.t+SETTLE||lastT<F.lastBarT); if(old&&inCorso&&(old.ok||b.h<old.h||b.l>old.l)) continue;
+const fermo=!aperto||(!!old&&old.o===b.o&&old.h===b.h&&old.l===b.l&&old.c===b.c);
+const ok=!!(old&&old.ok)||b.t<lastT||(ora>=b.t+SETTLE&&fermo); F.bars.set(b.t,{t:b.t,o:b.o,h:b.h,l:b.l,c:b.c,ok,at:pr.at,seq:pr.seq}); }
+if(lastT>F.lastBarT) F.lastBarT=lastT;
+if(F.bars.size>MAXM+MAXH){ const ks=[...F.bars.keys()].sort((p,q)=>p-q); for(const k of ks.slice(0,ks.length-MAXM)) F.bars.delete(k); F.minT=ks[ks.length-MAXM]; } }
+const needFull=()=>{ const now=Date.now()/1000; return !F.full||F.bars.size<150||(F.lastMin>0&&now-F.lastMin>FULL_GAP&&now-F.fullAt>FULL_GAP); };
+async function poll(){
+if(F.busy) return; F.busy=true; clearTimeout(F.timer); const gen=F.gen; let wait=60;
+try{ const full=needFull(), pr=await get(full?'7d':'1d');
+if(gen!==F.gen) return;
+merge(pr); if(full){ F.full=true; F.fullAt=Date.now()/1000; } F.conn='ok'; F.err=''; F.fails=0;
+if(!F.histT) F.histT=Math.min(Math.floor(pr.at/60)*60-60,pr.bars[pr.bars.length-1].t);
+calcola(); wait=nextDelay();
+}catch(x){ if(gen!==F.gen) return; F.fails++; F.conn='errore'; F.err=x.message||String(x); wait=x.kind==='rate'?Math.min(600,Math.max(30,x.retry||0)):Math.min(60,5*Math.pow(2,Math.min(F.fails,4))); render();
+}finally{ if(gen===F.gen){ F.busy=false; clearTimeout(F.timer); F.timer=setTimeout(poll,wait*1000); } } }
+function calcola(){ try{ compute(); F.calcErr=''; }catch(e){ F.calcErr=(e&&e.message)||String(e); F.P=null; F.live=null; F.ser=[]; F.done=[]; F.snaps=[]; try{ console.error(e); }catch(x){} }
+try{ render(); }catch(e){ try{ console.error(e); }catch(x){} } }
+function resetData(){ F.gen++; for(const a of F.acs) try{ a.abort(); }catch(e){} F.acs.clear(); clearTimeout(F.timer); F.busy=false;
+Object.assign(F,{bars:new Map(),full:false,fullAt:0,conn:'attesa',err:'',calcErr:'',fails:0,P:null,Pkey:'',done:[],ser:[],snaps:[],live:null,lastBarT:0,lastMin:0,minT:0,loaded:false,ev:[],M:null,stat:null,hover:null,seen:new Set(),lag:0,lagN:0,obs:[],histT:0,op:null,opHist:0}); render(); poll(); }
+const clone=v=>Array.isArray(v)?v.map(clone):(v&&typeof v==='object')?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,clone(x)])):v;
+function restore(S,src){ for(const k of Object.keys(S)) if(!(k in src)) delete S[k]; for(const k of Object.keys(src)) S[k]=src[k]; }
+function recOf(o,b,S,zPrima,ser,live){ const smp=!!o.sample, Tb=Math.floor(b.t/300)*300, day=nyDay(b.t);
+const e={t:b.t,c:b.c,h:b.h,l:b.l,Tb,day,live:!!live,smp,fpx:smp&&fin(o.fpx)?o.fpx:null,d1:smp&&fin(o.d)?o.d:null,cat:o.cat==null?null:o.cat,mz:fin(o.mz)?o.mz:null,
+primo:!!o.primoGiro,envZ:smp?o.envZ:zPrima,zF:S.z,adx:fin(S.adx)?S.adx:null,atr:smp&&fin(o.atr)?o.atr:(fin(S.st)?S.st:null),d5:smp&&fin(o.d5)?o.d5:null,p10:smp&&fin(o.p10)?o.p10:null,
+dTr:o.dTr==null?null:o.dTr,pGiro:o.pGiro==null?null:o.pGiro,nCasi:o.nCasi||0,n:S.n,TbC:null,dP:smp&&fin(o.dP)?o.dP:null,v:smp&&fin(o.v)?o.v:null,tau:smp&&(o.tau===0||fin(o.tau))?o.tau:null};
+const p5=ser.length>=5?ser[ser.length-5]:null;
+e.pTr=e.p10!=null&&p5&&p5.p10!=null&&p5.day===day?e.p10-p5.p10:null;
+e.poss=!!e.envZ&&e.tau!=null&&e.mz!=null&&e.tau<=PG_TAU&&e.mz<PG_ATR;
+return e; }
+function evalMinute(P,b,ser,live){ const S=P.S, zPrima=S.z, cur0=S.curT, chiusa0=S.closedCur, o=P.onMinute(b.t,b.h,b.l,b.c), e=recOf(o,b,S,zPrima,ser,live);
+e.TbC=(b.t-e.Tb===K.B-60)?e.Tb:(cur0!=null&&cur0!==e.Tb&&!chiusa0?cur0:null); return e; }
+function makeMachine(){ const M={lastT:null,lastZ:null,armedPre:false,preTb:null,giraTb:null,armedPoss:true,possOff:0,lat:null};
+function feed(e){ const out=[];
+if(!e.live){ M.lastT=e.t; const TbC=e.TbC!=null?e.TbC:e.Tb;
+if(e.adx!=null){ const lat=e.adx<ADX_LAT; if(M.lat!=null&&lat!==M.lat) out.push({type:'lat',t:e.t,on:lat,z:e.zF,Tb:TbC}); M.lat=lat; }
+if(M.lastZ!=null&&M.lastZ!==0&&e.zF!==0&&e.zF!==M.lastZ){ out.push({type:'giro',t:e.t,z:e.zF,Tb:TbC}); M.armedPre=false; M.armedPoss=true; M.possOff=0; } M.lastZ=e.zF; }
+if(e.cat!=null&&e.envZ){
+if(e.mz!=null&&e.mz>=PRE_RIARMO) M.armedPre=true;
+if(e.cat===1&&M.armedPre&&M.preTb!==e.Tb){ out.push({type:'pre',t:e.t,z:e.envZ,mz:e.mz,fpx:e.fpx,c:e.c,Tb:e.Tb,pGiro:e.pGiro,nCasi:e.nCasi}); M.armedPre=false; M.preTb=e.Tb; }
+if(e.cat===0&&M.giraTb!==e.Tb){ out.push({type:'gira',t:e.t,z:e.envZ,fpx:e.fpx,c:e.c,Tb:e.Tb}); M.giraTb=e.Tb; } }
+if(e.poss&&M.armedPoss&&e.envZ===e.zF){ out.push({type:'poss',t:e.t,z:e.envZ,dP:e.dP,v:e.v,tau:e.tau,mz:e.mz,fpx:e.fpx,c:e.c,Tb:e.Tb}); M.armedPoss=false; M.possOff=0; }
+else if(!e.poss&&!e.live&&!M.armedPoss){ M.possOff++; if(M.possOff>=10) M.armedPoss=true; }
+for(const ev of out){ ev.adx=e.adx; ev.lat=e.adx!=null&&e.adx<ADX_LAT; ev.live=!!e.live; }
+return out; }
+return {feed,M}; }
+const SCAD={pre:900,poss:1800,gira:null};
+function esito(ev,ser,from){ if(ev.type==='giro'||ev.type==='lat'||ev.type==='op') return null; const z0=ev.z, end=ev.type==='gira'?ev.Tb+300:ev.t+SCAD[ev.type], d0=nyDay(ev.t);
+let last=null; for(let j=from;j<ser.length;j++){ const e=ser[j]; if(e.t<ev.t) continue; if(e.day!==d0||e.t>end) return 'no'; last=e; if(e.zF!==0&&e.zF!==z0) return 'si'; }
+return last&&last.t>=end-60?'no':null; }
+const primoDa=(ser,t)=>{ let a=0,b=ser.length; while(a<b){ const m=(a+b)>>1; if(ser[m].t<t) a=m+1; else b=m; } return a; };
+function statsOf(ser){ const {feed}=makeMachine(), S={pre:[0,0],poss:[0,0],gira:[0,0]}, SL={pre:[0,0],poss:[0,0],gira:[0,0]}, SN={pre:[0,0],poss:[0,0],gira:[0,0]}, list=[];
+for(let i=0;i<ser.length;i++) for(const ev of feed(ser[i])) if(S[ev.type]) list.push([ev,i]);
+for(const [ev,i] of list){ const r=esito(ev,ser,i); if(r){ for(const X of [S,ev.lat?SL:SN]){ X[ev.type][0]++; if(r==='si') X[ev.type][1]++; } } }
+S.lat=SL; S.non=SN; return S; }
+function compute(){ const ks=[...F.bars.keys()].sort((a,b)=>a-b), closed=ks.filter(t=>F.bars.get(t).ok), key=ST.sym+'|'+ST.rule;
+if(F.done.length&&closed.length&&F.done[0].t<closed[0]){ let k=0; while(k<F.done.length&&F.done[k].t<closed[0]) k++; F.done.splice(0,k); F.ser.splice(0,k); F.snaps=F.snaps.filter(s=>(s.n-=k)>=0); }
+if(F.P&&F.Pkey===key&&F.done.length&&closed.length&&closed[0]<F.done[0].t){ const t0=F.done[0].t; let k=0; while(k<closed.length&&closed[k]<t0) k++; closed.splice(0,k); }
+let j=F.done.length;
+if(!F.P||F.Pkey!==key){ F.P=PINE.makePort(ST.rule,nyDay,PORT_OPTS); F.Pkey=key; F.done=[]; F.ser=[]; F.snaps=[]; F.ev=[]; F.M=makeMachine(); F.loaded=false; F.seen=new Set(); j=0; }
+else { for(let i=0;i<F.done.length;i++){ const d=F.done[i], t=closed[i], b=t==null?null:F.bars.get(t); if(t!==d.t||!b||b.o!==d.o||b.h!==d.h||b.l!==d.l||b.c!==d.c){ j=i; break; } }
+if(j<F.done.length){
+const tj=Math.min(F.done[j].t,closed[j]!=null?closed[j]:Infinity), sn=F.snaps.find(s=>s.n===j);
+if(sn){ restore(F.P.S,clone(sn.S)); F.snaps=F.snaps.filter(s=>s.n<=j); F.nRoll++; }
+else { F.P=PINE.makePort(ST.rule,nyDay,PORT_OPTS); F.snaps=[]; j=0; F.nFull++; }
+F.done.length=j; F.ser.length=j;
+for(const ev of F.ev) if(ev.t>=tj-1800) ev.esito=null; } }
+const P=F.P, S=P.S, nuovi=[];
+for(let i=j;i<closed.length;i++){ const b=F.bars.get(closed[i]), e=evalMinute(P,b,F.ser,false);
+F.ser.push(e); F.done.push({t:b.t,o:b.o,h:b.h,l:b.l,c:b.c});
+if(F.M.M.lastT==null||e.t>F.M.M.lastT) for(const ev of F.M.feed(e)) nuovi.push(ev);
+if(i>=closed.length-RSNAP){ F.snaps.push({n:F.done.length,S:clone(S)}); if(F.snaps.length>RSNAP) F.snaps.shift(); } }
+if(F.ser.length>MAXM+MAXH){ const cut=F.ser.length-MAXM; F.ser.splice(0,cut); F.done.splice(0,cut); F.snaps=F.snaps.filter(s=>(s.n-=cut)>=0); }
+F.lastMin=closed.length?closed[closed.length-1]:0;
+F.op=opMachine(F.ser);
+for(const x of F.op.ev){ if(!OP_AVVISO.has(x.why)) continue; if(F.loaded&&F.lastBarT-x.t>FRESH) continue;
+nuovi.push({type:'op',t:x.t,Tb:x.t,act:x.why==='attendi'?'aspetta':x.pos===0?'esci':'entra',why:x.why,prima:x.prima,pos:x.pos,z:x.why==='attendi'?x.z:(x.pos||x.prima),zz:x.z,apre:x.apre,adx:x.adx,d5:x.d5,mz:x.mz,lat:false,live:false}); }
+const lt=ks.length?ks[ks.length-1]:null, lb=lt!=null?F.bars.get(lt):null; F.live=null;
+if(lb&&!lb.ok&&lt>F.lastMin){ const snap=clone(S); try{ F.live=evalMinute(P,lb,F.ser,true); } finally{ restore(S,snap); }
+for(const ev of F.M.feed(F.live)) nuovi.push(ev); }
+const now=Date.now()/1000, cand=[];
+for(const ev of nuovi){ ev.key=ST.sym+'|'+ST.rule+'|'+ev.type+'|'+ev.Tb+(ev.type==='lat'?(ev.on?'+':'-'):'')+(ev.type==='op'?'|'+ev.act+'|'+ST.orari:''); ev.sym=ST.sym; ev.rule=ST.rule;
+if(F.seen.has(ev.key)) continue; F.seen.add(ev.key); F.ev.push(ev);
+if(F.loaded&&ev.t>F.histT&&(ev.type!=='op'||ev.t>F.opHist)&&F.lastBarT-ev.t<=FRESH&&ST.tipi.has(ev.type)&&inOrari(ev.t)) cand.push(ev); }
+if(F.seen.size>3000) F.seen=new Set([...F.seen].slice(-2000));
+if(cand.length) rivendica(cand,now);
+if(F.ev.length>4000) F.ev.splice(0,F.ev.length-4000);
+for(const ev of F.ev) if(ev.esito==null&&ev.type!=='giro'&&ev.type!=='lat'&&ev.type!=='op') ev.esito=esito(ev,F.ser,primoDa(F.ser,ev.t));
+F.stat=statsOf(F.ser); F.loaded=true;
+esponi(); }
+function esponi(){window.__giro={nBars:F.bars.size,minT:F.minT,nSnaps:F.snaps.length,nSeen:F.seen.size,nEv:F.ev.length,serTail:F.ser.slice(-40).map(e=>[e.t,e.zF,e.cat,e.mz,e.fpx,e.d5,e.p10,e.pTr]),nSer:F.ser.length,nDone:F.done.length,live:F.live,last:F.ser[F.ser.length-1]||null,
+ev:F.ev.map(e=>({type:e.type,t:e.t,Tb:e.Tb,z:e.z,key:e.key,avvisato:!!e.avvisato,muto:!!e.muto,esito:e.esito,lat:!!e.lat,on:e.on,adx:e.adx,live:e.live,act:e.act,why:e.why})),stat:F.stat,nFull:F.nFull,nRoll:F.nRoll,maxFly:F.maxFly,lag:F.lag,op:F.op?{pos:F.op.pos,blk:F.op.blk,since:F.op.since,why:F.op.why}:null,
+alerts:(window.__giro&&window.__giro.alerts)||[]}; }
+function rivendica(cand,now){ const fai=()=>{ const gia=new Set(lsList('giro|avvisati')), da=cand.filter(ev=>!gia.has(ev.key));
+if(da.length){ for(const ev of da){ if(AV.on) gia.add(ev.key); ev.avvisato=true; ev.muto=!AV.on; ev.rit=ritardo(now); } if(AV.on) lsSet('giro|avvisati',JSON.stringify([...gia].slice(-400))); annuncia(da); }
+for(const ev of cand) if(!ev.avvisato) ev.altraScheda=true; return da.length; };
+const L=AV.on&&typeof navigator!=='undefined'&&navigator.locks&&typeof navigator.locks.request==='function'?navigator.locks:null;
+if(!L){ fai(); return; }
+const giro=()=>new Promise(r=>{ try{ const mc=new MessageChannel(); mc.port1.onmessage=()=>{ mc.port1.close(); r(); }; mc.port2.postMessage(0); }catch(e){ r(); } });
+let fatto=false; L.request('giro|avvisati',()=>{ fatto=true; const n=fai(); esponi(); if(n) render(); return giro(); }).catch(()=>{ if(!fatto){ fai(); esponi(); render(); } }); }
+const TONI={poss:[[784,.14],[659,.14],[523,.22]],pre:[[880,.16],[1175,.22]],gira:[[1047,.09],[0,.05],[1047,.09],[0,.05],[1047,.09],[0,.05],[1568,.3]],giro:[[523,.18],[659,.18],[784,.18],[1047,.4]],lat:[[392,.22],[330,.3]],op:[[988,.12],[0,.06],[988,.12],[0,.06],[740,.32]]};
+const VIBRA={poss:[120,80,120],pre:[200,100,200],gira:[300,100,300,100,300],giro:[600],lat:[80,60,80],op:[400,120,400]};
+function suona(tipo){ if(!AV.on||!AV.ac) return; try{ const ac=AV.ac; if(ac.state!=='running'&&ac.resume) ac.resume().catch(()=>{}); let t=ac.currentTime+.02;
+for(const [hz,d] of TONI[tipo]){ if(hz){ const o=ac.createOscillator(), g=ac.createGain(); o.type=tipo==='gira'?'square':'sine'; o.frequency.value=hz; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(tipo==='gira'?.18:.32,t+.015); g.gain.exponentialRampToValueAtTime(0.0001,t+d); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+d+.02); } t+=d; } }catch(e){} }
+function parla(testi){ if(!AV.on||!ST.voce||!testi.length) return; try{ const s=window.speechSynthesis; if(!s) return; const v=(s.getVoices()||[]).find(x=>/^it/i.test(x.lang)); s.cancel();
+for(const txt of testi){ const u=new SpeechSynthesisUtterance(txt); u.lang='it-IT'; u.rate=1.05; if(v) u.voice=v; s.speak(u); } }catch(e){} }
+function notifica(tit,body,tag,stay){ if(!AV.notif) return; try{ if('Notification' in window&&Notification.permission==='granted') new Notification(tit,{body,tag,renotify:true,requireInteraction:!!stay}); }
+catch(e){ AV.notif=false; AV.notifNo='questo browser non mostra notifiche dalla pagina'; } }
+function testo(ev){ const x=testo0(ev); if(ev.type!=='lat'&&ev.type!=='op'&&ev.lat) x.body+=' Mercato laterale (ADX '+fAdx(ev.adx)+'): giri più frequenti e più corti.'; return x; }
+const vicino=e=>e.mz!=null&&e.mz<0?'già superato dalla barra in corso'+(fin(e.fpx)?' ('+px(e.fpx)+')':''):'a '+(fin(e.dP)?px(e.dP)+' punti, ':'')+atr(e.mz)+' ATR'+(fin(e.fpx)?' ('+px(e.fpx)+')':'');
+function testo0(ev){ const sym=ev.sym+' ('+RULES[ev.rule]+')', a=zTxt(ev.z), b=zTxt(-ev.z);
+if(ev.type==='lat') return ev.on?{tit:'≈ Mercato laterale · '+sym,body:'L\'ADX è sceso a '+fAdx(ev.adx)+' (sotto '+ADX_LAT+'): da qui i giri sono più frequenti e più corti, i segnali valgono meno.',voce:ev.sym+': mercato laterale'}
+:{tit:'↗ Fine del mercato laterale · '+sym,body:'L\'ADX è risalito a '+fAdx(ev.adx)+' (sopra '+ADX_LAT+'): i giri tornano più affidabili.',voce:ev.sym+': fine del mercato laterale'};
+if(ev.type==='op'&&ev.act==='aspetta'){ const Z=zTxt(ev.zz);
+return ev.apre?{tit:'⏸ Aspetta prima di entrare '+Z+' · '+sym,body:'Inizia l\'orario di trading nel mercato laterale '+(ev.mz!=null&&ev.mz<0?'con la barra da 5 minuti oltre il giro':'con il giro vicino (dist '+atr(ev.mz)+' ATR)')+': entri '+Z+' quando la dist torna sopra '+OP_ATR_T+' o finisce il laterale.',voce:ev.sym+': aspetta prima di entrare, laterale e giro vicino'}
+:{tit:'⏸ Aspetta prima di entrare '+Z+' · '+sym,body:'Giro confermato verso '+Z+' nel mercato laterale (ADX '+fAdx(ev.adx)+'): entri '+Z+' quando la dist dal nuovo giro è sopra '+OP_ATR_T+' o finisce il laterale.',voce:ev.sym+': aspetta prima di entrare, mercato laterale'}; }
+if(ev.type==='op'){ const Z=zTxt(ev.act==='esci'?ev.prima:ev.pos);
+if(ev.act==='entra') return {tit:'➜ Entra '+Z+' · '+sym,body:ev.why==='apre'?'Inizia l\'orario di trading: la zona è '+Z+'.':ev.adx!=null&&ev.adx>=ADX_LAT?'Fine del mercato laterale (ADX '+fAdx(ev.adx)+'): entra '+Z+'.':'La dist è tornata sopra '+OP_ATR_T+' ('+atr(ev.mz)+' ATR): entra '+Z+'.',voce:ev.sym+': entra '+Z.toLowerCase()};
+if(ev.why==='giroAtt') return {tit:'⏏ Chiudi il '+Z+' e aspetta · '+sym,body:'Giro confermato nel mercato laterale (ADX '+fAdx(ev.adx)+'): chiudi il '+Z+' e aspetta. Entri '+zTxt(-ev.prima)+' quando la dist dal nuovo giro è sopra '+OP_ATR_T+' o finisce il laterale.',voce:ev.sym+': chiudi e aspetta, mercato laterale'};
+return ev.why==='lat'?{tit:'⏏ Esci dal '+Z+' · '+sym,body:'Mercato laterale (ADX '+fAdx(ev.adx)+') e '+distSotto(ev.mz)+': esci. Rientri al prossimo giro, verso '+zTxt(-ev.prima)+'.',voce:ev.sym+': esci, laterale e giro vicino'}
+:{tit:'⏏ Esci dal '+Z+' · '+sym,body:'Fine dell\'orario di trading: esci.',voce:ev.sym+': fine orario, esci'}; }
+if(ev.type==='poss') return {tit:'✕ Possibile giro · '+sym,body:'Zona '+a+': il prezzo va verso il giro a '+atr(ev.v)+' punti al minuto e il giro è '+vicino(ev)+': al ritmo degli ultimi 15 minuti '+(ev.tau===0?'è già superato':'ci arriva tra circa '+Math.max(1,Math.round(ev.tau))+' min')+'. Può girare '+b+'.',voce:ev.sym+': possibile giro, può girare '+b.toLowerCase()};
+if(ev.type==='pre') return {tit:'⚠ In bilico · '+sym,body:'Zona '+a+' a '+atr(ev.mz)+' ATR dal giro: prezzo '+px(ev.c)+', giro a '+px(ev.fpx)+'.'+(ev.pGiro!=null?' Da qui la zona gira entro 15 minuti nel '+Math.round(ev.pGiro*100)+'% dei casi.':''),voce:ev.sym+' in bilico, può girare '+b.toLowerCase()};
+if(ev.type==='gira') return {tit:zArr(-ev.z)+' Sta girando '+b+' · '+sym,body:'La barra da 5 minuti in corso ha superato il prezzo d\'inversione ('+px(ev.fpx)+'): se chiude così, alle '+hm(ev.Tb+300)+' la zona diventa '+b+'.',voce:ev.sym+' sta girando '+b.toLowerCase()};
+return {tit:zArr(ev.z)+' Giro confermato: '+a+' · '+sym,body:'La barra da 5 minuti delle '+hm(ev.Tb)+' ha chiuso girata: ora la zona è '+a+'.',voce:ev.sym+': giro confermato, ora '+a.toLowerCase()}; }
+function annuncia(list){ list=list.slice().sort((a,b)=>PRIO[b.type]-PRIO[a.type]||a.t-b.t);
+const X=list.map(ev=>{ const x=testo(ev); if(ev.rit>1) x.body+=' (Dati in ritardo di '+ev.rit+' minuti.)'; return x; }), top=list[0];
+const tbGiro=new Set(list.filter(e=>e.type==='giro').map(e=>e.Tb));
+suona(top.type); parla(list.filter(e=>!(e.type==='gira'&&tbGiro.has(e.Tb))).map(e=>testo(e).voce));
+try{ if(AV.on&&navigator.vibrate) navigator.vibrate(VIBRA[top.type]); }catch(e){}
+list.forEach((ev,i)=>notifica(X[i].tit,X[i].body,ev.sym+'|'+ev.type,ev.type==='gira'||ev.type==='giro'));
+const tb=$('toast'); tb.className='toast '+top.type+' '+(top.type==='lat'?'':top.type==='op'?(top.act==='entra'?(top.pos>0?'zl':'zs'):'esci'):top.type==='giro'?(top.z>0?'zl':'zs'):(-top.z>0?'zl':'zs'));
+$('toastT').textContent=X[0].tit; $('toastB').textContent=X[0].body+(X.length>1?'\n'+X.slice(1).map(x=>'· '+x.tit).join('\n'):''); tb.hidden=false;
+clearTimeout(AV.toastT); AV.toastT=setTimeout(()=>{ tb.hidden=true; },45000); AV.flash={txt:X[0].tit,until:Date.now()+30000};
+const g=window.__giro||(window.__giro={}); g.alerts=(g.alerts||[]).concat(X.map(x=>x.tit+' | '+x.body)).slice(-200); }
+async function enableAlerts(){ AV.on=true;
+try{ const C=window.AudioContext||window.webkitAudioContext; if(C){ AV.ac=AV.ac||new C(); await AV.ac.resume(); } }catch(e){}
+try{ if('Notification' in window){ const p=Notification.permission==='default'?await Notification.requestPermission():Notification.permission; AV.notif=p==='granted'; AV.notifNo=p==='denied'?'notifiche bloccate nelle impostazioni del browser':'';
+if(AV.notif){ try{ new Notification('Avvisi attivi · '+ST.sym,{body:'Gli avvisi arriveranno anche come notifica.',tag:'giro-attivi',silent:true}); }catch(e){ AV.notif=false; AV.notifNo='questo browser non mostra notifiche dalla pagina'; } } }
+else AV.notifNo='questo browser non ha le notifiche delle pagine'; }catch(e){}
+try{ if(window.speechSynthesis){ const u=new SpeechSynthesisUtterance(' '); u.volume=0; window.speechSynthesis.speak(u); } }catch(e){}
+await keepAwake(); render(); }
+async function keepAwake(){ try{ if(AV.on&&'wakeLock' in navigator&&document.visibilityState==='visible'&&!AV.wake){ AV.wake=await navigator.wakeLock.request('screen'); AV.wake.addEventListener('release',()=>{ AV.wake=null; }); } }catch(e){ AV.wake=null; } }
+function provaAvviso(){ const e=F.live||F.ser[F.ser.length-1]||{envZ:1}, z=e.envZ||e.zF||1, now=Math.floor(Date.now()/1000), Tb=Math.floor(now/300)*300;
+annuncia([{type:'gira',t:now,z,fpx:e.fpx,c:e.c,Tb,sym:ST.sym,rule:ST.rule,key:'prova|'+now}]); }
+function finestra(t){ if(ST.orari==='sempre') return {dentro:true,fine:false,a:null,b:null,m:null};
+const q=et(Math.floor(t/60)*60), a=ST.orari==='rth'?570:240, b=ST.orari==='rth'?fineRth(q.day):fineExt(q.day); return {dentro:q.mod>=a&&q.mod<b,fine:q.mod===b-1,a,b,m:q.mod}; }
+const OP_AVVISO=new Set(['lat','fine','apre','giroAtt','attesa','attendi']);
+const latBassa=e=>!!e&&e.adx!=null&&e.adx<ADX_LAT&&e.mz!=null&&e.mz<OP_ATR;
+function opMachine(ser){ let pos=0, blk=0, since=null, why='', prevZ=0, prevIn=false, prevDay=null; const ev=[];
+for(const e of ser){ const w=finestra(e.t), z=e.zF||0, giro=prevZ!==0&&z!==0&&z!==prevZ, latB=latBassa(e);
+if(blk!==0&&z!==blk) blk=0;
+let want=(!w.dentro||w.fine)?0:(z===blk?0:z), k='';
+if(pos!==0&&want===pos&&latB){ want=0; blk=pos; k='lat'; }
+else if(want!==0&&want!==pos&&latB){ want=0; k='att'; }
+if(k==='att'&&pos===0&&(giro||(w.dentro&&(!prevIn||prevDay!==e.day)))) ev.push({t:e.t,prima:0,pos:0,why:'attendi',z,apre:!giro,adx:e.adx,d5:e.d5,mz:e.mz});
+if(want!==pos){ const prima=pos; pos=want; since=e.t;
+why=pos===0?(k==='lat'?'lat':k==='att'?'giroAtt':(w.fine?'fine':!w.dentro?'orario':'zona')):(giro||prima!==0?'giro':(!prevIn||prevDay!==e.day)?'apre':'attesa');
+ev.push({t:e.t,prima,pos,why,adx:e.adx,d5:e.d5,mz:e.mz}); }
+prevZ=z; prevIn=w.dentro&&!w.fine; prevDay=e.day; }
+return {pos,blk,since,why,ev}; }
+function opView(){ const s=F.ser, last=s[s.length-1], M=F.op; if(!last||!M) return null; if(last.n<K.WARM) return {k:'fuori',big:'IN ATTESA',why:'Servono '+K.WARM+' barre da 5 minuti di storia.',da:null};
+const now=Date.now()/1000-lagCd(), L=F.live, tNow=L?L.t:Math.floor(now/60)*60, w=finestra(tNow), appena=M.since===last.t&&now-(last.t+60)<90;
+const A=L&&L.adx!=null?L.adx:last.adx, D=L&&L.mz!=null?L.mz:last.mz, latN=A!=null&&A<ADX_LAT, apre=w.a!=null?tNow+(w.a-w.m)*60:null, chiude=w.b!=null?tNow+(w.b-w.m)*60:null;
+const pos=M.pos, da=M.since!=null?M.since+60:null;
+if(pos!==0){ const Z=zTxt(pos), Y=zTxt(-pos);
+let ult=null; for(let i=M.ev.length-1;i>=0;i--) if(M.ev[i].why!=='attendi'){ ult=M.ev[i]; break; }
+if(appena) return {k:'entra',z:pos,big:'ENTRA ADESSO · '+Z,why:M.why==='giro'?(ult&&ult.prima!==0?'Giro confermato: chiudi il '+Y+' ed entra '+Z+'.':'Giro confermato: entra '+Z+'.'):M.why==='apre'?'Inizia l\'orario di trading: la zona è '+Z+'.'
+:M.why==='attesa'?(ult&&ult.adx!=null&&ult.adx>=ADX_LAT?'Fine del mercato laterale (ADX '+fAdx(ult.adx)+'): entra '+Z+'.':'La dist è tornata sopra '+OP_ATR_T+' ('+(ult&&ult.mz!=null?atr(ult.mz)+' ATR':'—')+'): entra '+Z+'.'):'La zona è '+Z+'.',da};
+if(L&&L.envZ===pos&&L.cat===0) return {k:'prepEsci',z:pos,big:'PREPARATI AD USCIRE',why:'La barra da 5 minuti sta girando '+Y+': se chiude così (alle '+hm(L.Tb+300)+'), esci dal '+Z+' ed entra '+Y+'.',da};
+if(L&&L.envZ===pos&&L.cat===1) return {k:'prepEsci',z:pos,big:'PREPARATI AD USCIRE',why:'La zona '+Z+' è in bilico: il prezzo è a '+atr(L.mz)+' ATR dal giro ('+px(L.fpx)+'). Se gira, esci dal '+Z+' ed entra '+Y+'.',da};
+if(latN&&D!=null&&D<OP_AVV) return {k:'prepEsci',z:pos,big:'PREPARATI AD USCIRE',why:'Mercato laterale (ADX '+fAdx(A)+') e '+(D<0?'la barra da 5 minuti oltre il giro: se il minuto chiude così, esci.':'dist a '+atr(D)+' ATR'+(D<OP_ATR?': se il minuto chiude sotto '+OP_ATR_T+', esci.':': sotto '+OP_ATR_T+' esci e rientri al giro dopo.')),da};
+if(L&&L.poss&&L.envZ===pos) return {k:'prepEsci',z:pos,big:'PREPARATI AD USCIRE',why:'Possibile giro: '+tTxt(L)+' (punti al minuto '+fv(L.v)+', dist '+dTxt(L)+'). Se la zona gira, esci dal '+Z+' ed entra '+Y+'.',da};
+if(chiude!=null&&w.dentro&&w.b-w.m<=OP_PRIMA) return {k:'prepEsci',z:pos,big:'PREPARATI AD USCIRE',why:'L\'orario di trading finisce alle '+hm(chiude)+': esci in chiusura.',da};
+return {k:'dentro',z:pos,big:'SEI DENTRO · '+Z,why:'Resti '+Z+' finché la zona non gira'+(latN?'. Mercato laterale: esci se la dist scende sotto '+OP_ATR_T+' (ora '+(D!=null?atr(D)+' ATR':'—')+').':'.'),da}; }
+let ultimo=null; for(let i=M.ev.length-1;i>=0;i--) if(M.ev[i].why!=='attendi'){ ultimo=M.ev[i]; break; }
+if(appena&&ultimo&&ultimo.pos===0){ const Z=zTxt(ultimo.prima);
+return {k:'esci',z:ultimo.prima,big:'ESCI ADESSO',why:M.why==='lat'?'Mercato laterale (ADX '+fAdx(ultimo.adx)+') e '+distSotto(ultimo.mz)+': esci dal '+Z+'. Rientri al prossimo giro, verso '+zTxt(-ultimo.prima)+'.'
+:M.why==='giroAtt'?'Giro confermato nel mercato laterale (ADX '+fAdx(ultimo.adx)+'): chiudi il '+Z+' e aspetta. Entri '+zTxt(-ultimo.prima)+' quando la dist dal nuovo giro è sopra '+OP_ATR_T+' o finisce il laterale.'
+:M.why==='fine'?'Fine dell\'orario di trading: esci dal '+Z+'.':'Esci dal '+Z+'.',da}; }
+if(M.blk!==0){ const Y=zTxt(-M.blk);
+if(L&&L.envZ===M.blk&&L.cat===0) return {k:'prepEntra',z:-M.blk,big:'PREPARATI AD ENTRARE · '+Y,why:'La barra da 5 minuti sta girando '+Y+': se chiude così (alle '+hm(L.Tb+300)+'), entra '+Y+'.',da};
+if(L&&L.envZ===M.blk&&L.cat===1) return {k:'prepEntra',z:-M.blk,big:'PREPARATI AD ENTRARE · '+Y,why:'La zona '+zTxt(M.blk)+' è in bilico: il prezzo è a '+atr(L.mz)+' ATR dal giro ('+px(L.fpx)+'). Al giro entra '+Y+'.',da};
+if(L&&L.poss&&L.envZ===M.blk) return {k:'prepEntra',z:-M.blk,big:'PREPARATI AD ENTRARE · '+Y,why:'Possibile giro della zona '+zTxt(M.blk)+': '+tTxt(L)+' (punti al minuto '+fv(L.v)+'). Al giro entra '+Y+'.',da};
+return {k:'fuori',z:0,big:'SEI FUORI',why:'Uscito per il mercato laterale con il giro vicino: rientri al prossimo giro, verso '+Y+'.',da}; }
+const zz=(L&&L.zF)||last.zF;
+if(!w.dentro&&w.a!=null&&w.m<w.a&&w.a-w.m<=OP_PRIMA&&giornoBorsa(tNow)&&zz) return {k:'prepEntra',z:zz,big:'PREPARATI AD ENTRARE · '+zTxt(zz),why:'Alle '+hm(apre)+' inizia l\'orario di trading: entri nel verso della zona, ora '+zTxt(zz)+'.',da};
+if(w.dentro&&!w.fine&&zz){ const lb=latBassa(L)||(!L&&latBassa(last));
+return {k:'prepEntra',z:zz,big:'PREPARATI AD ENTRARE · '+zTxt(zz),why:lb?'Mercato laterale (ADX '+fAdx(A)+') '+(D!=null&&D<0?'con la barra da 5 minuti oltre il giro':'con la dist a '+atr(D)+' ATR')+': entri '+zTxt(zz)+' quando la dist torna sopra '+OP_ATR_T+' o finisce il laterale.'
+:'Alla chiusura di questo minuto ('+hm(tNow+60)+') entri '+zTxt(zz)+'.',da}; }
+if(!w.dentro||w.fine) return {k:'fuori',z:0,big:'SEI FUORI',why:'Fuori dall\'orario di trading'+(w.a!=null&&w.m<w.a?': inizia alle '+hm(apre)+'.':'.'),da};
+return {k:'fuori',z:0,big:'SEI FUORI',why:'Zona non ancora decisa.',da}; }
+function opStoria(){ F.ev=F.ev.filter(e=>e.type!=='op');
+for(const x of F.op.ev){ if(!OP_AVVISO.has(x.why)) continue; const act=x.why==='attendi'?'aspetta':x.pos===0?'esci':'entra', key=ST.sym+'|'+ST.rule+'|op|'+x.t+'|'+act+'|'+ST.orari;
+F.seen.add(key); F.ev.push({type:'op',t:x.t,Tb:x.t,act,why:x.why,prima:x.prima,pos:x.pos,z:x.why==='attendi'?x.z:(x.pos||x.prima),zz:x.z,apre:x.apre,adx:x.adx,d5:x.d5,mz:x.mz,lat:false,live:false,key,sym:ST.sym,rule:ST.rule}); } }
+const ORARI_TXT={rth:'9:30–16:00 di New York',ext:'4:00–20:00 di New York',sempre:'a tutte le ore'};
+function opRender(){ const el=$('op'), v=opView(), now=Date.now()/1000-lagCd();
+if(!v){ el.className='op fuori'; $('opBig').textContent='In attesa dei dati'; $('opWhy').textContent=''; $('opDa').textContent=''; return; }
+const vecchio=F.conn==='errore'&&ritardo(Date.now()/1000)>=1;
+el.className='op '+v.k+(v.z>0?' zl':v.z<0?' zs':'')+(vecchio?' vecchio':'');
+if($('opBig').textContent!==v.big) $('opBig').textContent=v.big;
+$('opWhy').textContent=(vecchio?'⚠ Dati fermi: indicazione delle '+hm(F.lastBarT)+'. ':'')+v.why;
+const dentro=F.op&&F.op.pos!==0; $('opDa').textContent=v.da!=null&&v.k!=='entra'&&v.k!=='esci'?(dentro?'dentro da ':'fuori da ')+durata(now-v.da):'';
+$('opReg').textContent='Regole: dentro nel verso della zona, al giro confermato ti giri; nel mercato laterale con la dist sotto '+OP_ATR_T+' (giro vicino) esci (e rientri al giro dopo) e per entrare aspetti che la dist torni sopra '+OP_ATR_T+'; si opera negli orari di «Avvisa» (ora: '+ORARI_TXT[ST.orari]+'). Sono le regole applicate in automatico, non consigli.'; }
+function latInfo(){ const s=F.ser; if(!s.length) return null; const e=s[s.length-1]; if(e.adx==null||e.n<K.WARM) return null;
+let prev=null; for(let i=s.length-2;i>=0&&i>=s.length-40;i--){ const a=s[i].adx; if(a!=null&&a!==e.adx){ prev=a; break; } }
+let ev=null; for(let i=F.ev.length-1;i>=0;i--) if(F.ev[i].type==='lat'){ ev=F.ev[i]; break; }
+const on=e.adx<ADX_LAT; return {adx:e.adx,prev,on,da:ev&&ev.on===on?ev.Tb+300:null}; }
+const durata=s=>{ s=Math.max(0,Math.floor(s)); const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60, p2=v=>String(v).padStart(2,'0');
+return h>=24?Math.floor(h/24)+' g '+(h%24)+' h':h?h+':'+p2(m)+':'+p2(x):m+':'+p2(x); };
+const dataRf=new Intl.DateTimeFormat('it-IT',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit'}), giornoRf=new Intl.DateTimeFormat('it-IT',{timeZone:'Europe/Rome',weekday:'short',day:'2-digit',month:'2-digit'});
+function quando(t,da){ const d=dataRf.format(new Date(t*1000)), oggi=Date.now()/1000, g=d===dataRf.format(new Date(oggi*1000))?'':d===dataRf.format(new Date((oggi-86400)*1000))?'ieri ':giornoRf.format(new Date(t*1000))+' ';
+return da?(g?'da '+g+'alle ':'dalle ')+hm(t):(g?g:'')+'alle '+hm(t); }
+function latRow(){ const el=$('latr'), li=latInfo(); if(!li){ el.className='latr'; el.innerHTML=''; return; }
+const now=Date.now()/1000-lagCd(), freccia=li.prev==null?'':li.adx>li.prev?' ↑':li.adx<li.prev?' ↓':' →';
+const t=li.on?(li.da!=null?'≈ In laterale da <b>'+durata(now-li.da)+'</b> ('+esc(quando(li.da,true))+')':'≈ In laterale da prima dei giorni caricati')
+:(li.da!=null?'Ultimo laterale finito da <b>'+durata(now-li.da)+'</b> ('+esc(quando(li.da,false))+')':'Nessun laterale nei giorni caricati');
+const a1=Math.round(li.adx*10)/10, dist=Math.abs(a1-ADX_LAT), dTxt=fAdx(dist), dir=li.prev==null?'':li.adx>li.prev?', in salita':li.adx<li.prev?', in discesa':', fermo';
+const manca=dTxt==='0,0'?'sulla soglia di '+ADX_LAT:li.on?'mancano '+dTxt+' per uscire':'mancano '+dTxt+' al laterale';
+const tip='ADX '+fAdx(a1)+': '+(li.on?dTxt+' sotto':dTxt+' sopra')+' la soglia del laterale ('+ADX_LAT+')'+dir;
+el.className='latr'+(li.on?' on':'');
+el.innerHTML='<span class="lt">'+t+'</span><span class="adx" title="'+esc(tip)+'" aria-label="'+esc(tip)+'"><span class="av">ADX <b>'+fAdx(a1)+'</b>'+freccia+'</span>'
++'<span class="am" aria-hidden="true"><i class="f" style="width:'+(Math.min(50,li.adx)/50*100).toFixed(1)+'%"></i><i class="s"></i></span><small>'+esc(manca)+'</small></span>'; }
+function daxRow(e){ const el=$('dax'), d=e&&e.n>=K.WARM&&e.envZ?daxOf(e):null; if(d==null){ el.className='dax'; el.innerHTML=''; return; }
+const b=daxBanda(d), lat=e.adx<ADX_LAT, a1=Math.round(e.adx*10)/10;
+const li=latInfo(), chiuso=li?Math.round(li.adx*10)/10:null, se=e.live&&chiuso!=null&&chiuso!==a1?' se la barra delle '+hm(e.Tb)+' chiude così; ora '+fAdx(chiuso):'';
+const da=lat?'dist '+f2(e.mz)+' − '+atr(OP_ATR)+' del laterale (ADX '+fAdx(a1)+' sotto '+ADX_LAT+se+')':'= dist in ATR (ADX '+fAdx(a1)+se+': nessun margine da togliere)';
+const salto=!lat&&a1<ADX_LAT+1?' · se l\'ADX scende sotto '+ADX_LAT+': '+f2(d-OP_ATR)+' ('+daxBanda(d-OP_ATR)[2]+')':'';
+el.className='dax '+b[1];
+el.innerHTML='<span class="dv">distadx <b>'+esc(f2(d))+'</b></span><span class="dl">'+esc(b[2])+'</span><small>'+esc(da+salto)+'</small>'; }
+function stato(){ const e=F.live||F.ser[F.ser.length-1]; return e||null; }
+function render(){ const fr=freshness(), e=stato(), card=$('card'), now=Date.now()/1000;
+let cls='none', big='In attesa dei dati', badge='', lines=[];
+if(e&&e.n<K.WARM){ big='Riscaldamento'; lines.push('Servono '+K.WARM+' barre da 5 minuti di storia: per ora '+e.n+'.'); }
+else if(e&&e.cat!=null&&e.envZ){ const z=e.envZ, a=zTxt(z), b=zTxt(-z), dpt=fin(e.fpx)?Math.abs(e.c-e.fpx):null;
+const pg=e.pGiro!=null?' Nei dati caricati, da qui la zona gira entro 15 minuti nel '+Math.round(e.pGiro*100)+'% dei casi ('+e.nCasi+').':'';
+if(e.cat===0){ cls='gira '+(-z>0?'zl':'zs'); big=zArr(-z)+' STA GIRANDO → '+b; badge=cdBadge(e);
+lines.push('La barra da 5 minuti in corso ha superato il prezzo d\'inversione ('+px(e.fpx)+'): se chiude così, alle '+hm(e.Tb+300)+' la zona diventa '+b+'.');
+const g=F.stat&&F.stat.gira; if(g&&g[0]>=10) lines.push('Nei dati caricati, quando il triangolo resta fino alla fine del minuto la barra chiude girata nel '+Math.round(g[1]/g[0]*100)+'% dei casi ('+g[0]+').'); }
+else if(e.cat===1){ cls='pre '+(z>0?'zl':'zs'); big='⚠ IN BILICO · '+a; badge=atr(e.mz)+' ATR';
+lines.push('Il prezzo ('+px(e.c)+') è a '+atr(e.mz)+' ATR dal giro: mancano '+px(dpt)+' fino a '+px(e.fpx)+'. Se ci arriva, la barra gira '+b+'.'+pg); }
+else { const pf=perdeForza(e); cls=(e.cat===2||pf?'fra ':'sol ')+(z>0?'zl':'zs'); big=zArr(z)+' '+a+' · '+(e.cat===2?'fragile':pf?'perde forza':'solido'); badge=atr(e.mz)+' ATR';
+lines.push('Il giro è a '+px(e.fpx)+': dist '+px(dpt)+' punti ('+atr(e.mz)+' ATR)'+(tTxt(e)?'; '+tTxt(e)+'.':'.')+(e.cat===2?pg:'')); } }
+else if(e&&(e.envZ||e.zF)){ const z=e.envZ||e.zF; cls='sol '+(z>0?'zl':'zs'); big=zArr(z)+' '+zTxt(z);
+lines.push('In questo minuto la lettura non c\'è: il prezzo è esattamente sul prezzo d\'inversione'+(fin(e.fpx)?' ('+px(e.fpx)+')':'')+' oppure mancano i dati per calcolarla.'); }
+else if(e){ big='Zona non ancora decisa'; }
+if(e&&e.n>=K.WARM&&(e.envZ||e.zF)){
+if(e.poss) lines.push('✕ Possibile giro: '+tTxt(e)+' (punti al minuto '+fv(e.v)+').');
+let lastGiro=null; for(let i=F.ev.length-1;i>=0;i--) if(F.ev[i].type==='giro'){ lastGiro=F.ev[i]; break; } if(lastGiro&&now-(lastGiro.Tb+300)<=900) lines.push('Giro confermato alle '+hm(lastGiro.Tb+300)+': ora '+zTxt(lastGiro.z)+'.');
+const li=latInfo(); if(li&&li.on) lines.push('Mercato laterale: i giri sono più frequenti e più corti.'); }
+const r=ritardo(now); if(e&&F.lastBarT){ if(F.conn==='errore'&&r>=1){ cls+=' vecchio'; lines.unshift('⚠ Dati fermi da '+r+' minuti (il Worker non risponde): quello che vedi è lo stato delle '+hm(F.lastBarT)+'.'); }
+else if(marketOpen(now)&&r>=2) lines.unshift('Ultimo minuto ricevuto '+r+' minuti fa (dati in ritardo o nessuno scambio): quello che vedi è lo stato delle '+hm(F.lastBarT)+'.'); }
+card.className='card '+cls; $('big').textContent=big; $('badge').textContent=badge; $('lines').innerHTML=lines.map(x=>'<p>'+esc(x)+'</p>').join('');
+gauge(e);
+$('cd').textContent=cdText(); latRow(); daxRow(e); opRender();
+const c=$('ctx'); c.textContent=e&&fin(e.dP)?('Dist '+dTxt(e)+' · punti al minuto '+fv(e.v)+(fin(e.v)?' ('+vVerso(e.v)+')':'')+' · prezzo '+px(e.c)+(F.live?' (minuto in corso)':'')):'';
+const s=F.stat, q=(X,k)=>X&&X[k][0]?Math.round(X[k][1]/X[k][0]*100)+'% ('+X[k][0]+')':'— (0)', pc=k=>q(s,k)+(s&&s.lat[k][0]>=5&&s.non[k][0]>=5?' [laterale '+q(s.lat,k)+', non laterale '+q(s.non,k)+']':'');
+$('stat').textContent=s?('Nei dati caricati, la zona poi gira davvero: possibile giro (entro 30 min) '+pc('poss')+' · in bilico (entro 15 min) '+pc('pre')+' · sta girando (triangolo a fine minuto, entro la chiusura della barra) '+pc('gira')+'.'):'';
+const today=e?e.day:null, tv=v=>v.type==='giro'||v.type==='lat'?v.Tb+300:v.type==='op'?v.t+60:v.t, oggi=F.ev.filter(v=>nyDay(v.t)===today).slice(-60).map((v,i)=>[v,i]).sort((x,y)=>tv(y[0])-tv(x[0])||y[1]-x[1]).map(x=>x[0]);
+$('log').innerHTML=oggi.length?oggi.map(v=>{ const x=testo(v), es=v.esito==='si'?'<em class="si">girata</em>':v.esito==='no'?'<em class="no">non girata</em>':(v.type==='giro'||v.type==='lat'||v.type==='op')?'':'<em>…</em>';
+const cls=v.type==='lat'?'lat'+(v.on?' on':' off'):v.type==='op'?'op '+v.act:v.type+' '+((v.type==='giro'?v.z:-v.z)>0?'l':'s'), lt=v.type!=='lat'&&v.type!=='op'&&v.lat?' <i class="lt">laterale</i> ':'';
+return '<li class="'+cls+'"><b>'+esc(hm(tv(v)))+'</b> '+esc(x.tit.replace(' · '+v.sym+' ('+RULES[v.rule]+')',''))+lt+(v.avvisato?' 🔔':v.altraScheda?' 🔔 (altra scheda)':'')+es+'<span>'+esc(x.body)+'</span></li>'; }).join(''):'<li class="vuoto">Nessun evento oggi.</li>';
+$('stato').textContent=fr.t; $('stato').className='stato '+fr.k;
+const btn=$('avvisi'); btn.textContent=AV.on?('Avvisi attivi: suono'+(ST.voce?', voce':'')+(AV.notif?', notifiche':'')+(AV.wake?', schermo acceso':'')+(AV.notifNo?' · '+AV.notifNo:'')):'Attiva gli avvisi (suono, voce, notifica, schermo acceso)'; btn.classList.toggle('on',AV.on);
+titolo(); draw(); }
+function cdText(){ const e=stato(), now=Date.now()/1000; if(!e||!e.Tb) return ''; const r=ritardo(now);
+if(!F.live) return 'Ultimo minuto chiuso: '+hm(e.t)+(marketOpen(now)?'':' · mercato chiuso');
+if(r>1) return 'Barra da 5 minuti delle '+hm(F.live.Tb)+' · dati in ritardo di '+r+' minuti';
+return 'La barra da 5 minuti delle '+hm(F.live.Tb)+' chiude tra '+mmss(F.live.Tb+300-(now-lagCd())); }
+const lagCd=()=>F.lagN>10?F.lagN:0;
+const cdBadge=e=>e.live&&ritardo(Date.now()/1000)<=1?mmss(e.Tb+300-(Date.now()/1000-lagCd())):'in corso';
+function gauge(e){ const g=$('gauge'), mk=$('gmk'); if(!e||e.mz==null||e.cat==null){ g.classList.add('off'); return; } g.classList.remove('off');
+const lo=-0.5, hi=2, v=Math.max(lo,Math.min(hi,e.mz)); mk.style.left=((v-lo)/(hi-lo)*100).toFixed(2)+'%'; mk.className='gmk c'+e.cat; }
+function titolo(){ const e=stato(); let t='Giro · '+ST.sym;
+if(e&&e.cat===0&&e.envZ) t=zArr(-e.envZ)+' gira '+zTxt(-e.envZ)+' · '+ST.sym; else if(e&&e.cat===1) t='⚠ in bilico · '+ST.sym; else if(e&&(e.envZ||e.zF)) t=zArr(e.envZ||e.zF)+' '+zTxt(e.envZ||e.zF)+' · '+ST.sym;
+if(AV.flash&&Date.now()<AV.flash.until&&Math.floor(Date.now()/1000)%2===0) t=AV.flash.txt; document.title=t; }
+const COL={g:'#22c55e',r:'#ef4444',o:'#f59e0b',px:'#d1d4dc',grid:'rgba(255,255,255,.07)',mu:'#8b919b'};
+const GL=8, GR=74, GT=14, GB=26;
+function punti(){ const all=F.live?F.ser.concat([F.live]):F.ser; return all.slice(-ST.win); }
+function draw(){ const cv=$('ch'); if(!cv) return; const W=Math.max(200,cv.parentElement.clientWidth), H=Math.round(Math.max(260,Math.min(440,W*.62))), dpr=window.devicePixelRatio||1;
+if(cv.width!==Math.round(W*dpr)||cv.height!==Math.round(H*dpr)){ cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); cv.style.height=H+'px'; }
+const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H); g.fillStyle='#0b0b0c'; g.fillRect(0,0,W,H);
+const P=punti(); if(P.length<2){ g.fillStyle=COL.mu; g.font='14px system-ui,sans-serif'; g.fillText('In attesa dei minuti…',16,30); $('tip').hidden=true; return; }
+const L=GL, R=GR, T=GT, B=GB, pw=W-L-R, ph=H-T-B, n=P.length, xs=i=>L+(n===1?pw/2:i*pw/(n-1));
+let lo=Infinity, hi=-Infinity; for(const e of P){ lo=Math.min(lo,e.l); hi=Math.max(hi,e.h); }
+for(const e of P) if(e.fpx!=null&&e.atr&&Math.abs(e.fpx-e.c)<=3*e.atr){ lo=Math.min(lo,e.fpx); hi=Math.max(hi,e.fpx); }
+const pad=Math.max((hi-lo)*.08,hi*1e-5); lo-=pad; hi+=pad; const ys=v=>T+(hi-v)/(hi-lo)*ph, step=nice((hi-lo)/5), every=ST.win<=60?15:ST.win<=120?30:60;
+g.save(); g.beginPath(); g.rect(L,T,pw,ph); g.clip();
+for(let i=0;i<n;i++){ const z=P[i].envZ; if(!z) continue; const x0=i?((xs(i-1)+xs(i))/2):L, x1=i<n-1?((xs(i)+xs(i+1))/2):L+pw; g.fillStyle=z>0?'rgba(34,197,94,.06)':'rgba(239,68,68,.06)'; g.fillRect(x0,T,x1-x0,ph); }
+g.fillStyle='rgba(160,166,176,.55)'; for(let i=0;i<n;i++){ const a=P[i].adx; if(a==null||a>=ADX_LAT) continue; const x0=i?((xs(i-1)+xs(i))/2):L, x1=i<n-1?((xs(i)+xs(i+1))/2):L+pw; g.fillRect(x0,T+ph-5,x1-x0,5); }
+g.strokeStyle=COL.grid; g.setLineDash([2,4]); g.lineWidth=1;
+for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step){ const y=ys(v); g.beginPath(); g.moveTo(L,y); g.lineTo(L+pw,y); g.stroke(); }
+for(let i=0;i<n;i++) if(Math.floor(P[i].t/60)%every===0){ const x=xs(i); g.beginPath(); g.moveTo(x,T); g.lineTo(x,T+ph); g.stroke(); }
+g.setLineDash([]);
+g.fillStyle='rgba(245,158,11,.16)';
+for(let i=0;i<n;i++){ const e=P[i]; if(e.fpx==null||!e.atr||!e.d1||Math.abs(e.fpx-e.c)>3*e.atr) continue; const side=e.d1>0?1:-1, y0=ys(e.fpx), y1=ys(e.fpx+side*.5*e.atr), x0=i?((xs(i-1)+xs(i))/2):xs(i)-1, x1=i<n-1?((xs(i)+xs(i+1))/2):xs(i)+1; g.fillRect(x0,Math.min(y0,y1),x1-x0,Math.abs(y1-y0)); }
+g.strokeStyle=COL.px; g.lineWidth=1.4; g.beginPath(); P.forEach((e,i)=>{ const x=xs(i), y=ys(e.c); i?g.lineTo(x,y):g.moveTo(x,y); }); g.stroke();
+g.lineWidth=2.2; let prev=null;
+for(let i=0;i<n;i++){ const e=P[i], ok=e.fpx!=null&&e.atr&&Math.abs(e.fpx-e.c)<=3*e.atr&&e.d1; if(ok&&prev&&prev.d1*e.d1>0){ g.strokeStyle=e.d1>0?COL.g:COL.r; g.beginPath(); g.moveTo(xs(i-1),ys(prev.fpx)); g.lineTo(xs(i),ys(e.fpx)); g.stroke(); }
+else if(ok&&(!prev||prev.d1*e.d1<=0)){ g.fillStyle=e.d1>0?COL.g:COL.r; g.fillRect(xs(i)-1,ys(e.fpx)-1,2,2); } prev=ok?e:null; }
+g.lineWidth=1;
+for(let i=1;i<n;i++){ const a=P[i-1], b=P[i]; if(!b.live&&a.zF&&b.zF&&a.zF!==b.zF){ const x=xs(i); g.strokeStyle=b.zF>0?'rgba(34,197,94,.55)':'rgba(239,68,68,.55)'; g.setLineDash([4,3]); g.beginPath(); g.moveTo(x,T); g.lineTo(x,T+ph); g.stroke(); g.setLineDash([]); } }
+const idx=new Map(P.map((e,i)=>[e.t,i])), evs=F.ev.filter(v=>idx.has(v.t));
+for(const v of evs){ const i=idx.get(v.t), e=P[i], x=xs(i), dn=v.z>0;
+const y=dn?ys(e.h)-12:ys(e.l)+12;
+if(v.type==='gira'){ g.globalAlpha=e.adx!=null&&e.adx<ADX_LAT?.5:1; tri(g,x,y,dn,7,dn?COL.r:COL.g,true); g.globalAlpha=1; }
+else if(v.type==='pre'){ tri(g,x,dn?y-4:y+4,dn,5.5,COL.o,false); }
+else if(v.type==='poss'){ const yy=dn?y-16:y+16; g.strokeStyle=COL.o; g.lineWidth=2; g.beginPath(); g.moveTo(x-5,yy-5); g.lineTo(x+5,yy+5); g.moveTo(x+5,yy-5); g.lineTo(x-5,yy+5); g.stroke(); g.lineWidth=1; } }
+const hov=F.hover!=null&&idx.has(F.hover)?idx.get(F.hover):null;
+if(hov!=null){ const e=P[hov], x=xs(hov); g.strokeStyle='rgba(255,255,255,.35)'; g.beginPath(); g.moveTo(x,T); g.lineTo(x,T+ph); g.stroke(); g.fillStyle='#fff'; g.beginPath(); g.arc(x,ys(e.c),3,0,6.3); g.fill(); }
+g.restore();
+g.font='11px system-ui,sans-serif'; g.textBaseline='middle'; g.fillStyle=COL.mu;
+for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step) g.fillText(px(v),L+pw+6,ys(v));
+g.textBaseline='alphabetic'; g.textAlign='center'; for(let i=0;i<n;i++) if(Math.floor(P[i].t/60)%every===0) g.fillText(hm(P[i].t),xs(i),H-8); g.textAlign='left';
+const last=P[n-1]; if(last.fpx!=null){ const yf=ys(last.fpx); if(last.atr&&Math.abs(last.fpx-last.c)<=3*last.atr&&yf>=T&&yf<=T+ph) tag(g,L+pw+2,yf,px(last.fpx),'#2a2e35','#d1d4dc',R-4);
+else { const up=last.fpx>last.c, y0=up?T:T+ph-34; g.font='11px system-ui,sans-serif'; g.fillStyle='#2a2e35'; g.fillRect(L+pw+2,y0,R-4,34); g.fillStyle='#d1d4dc'; g.textBaseline='middle'; g.fillText('giro '+(up?'↑':'↓'),L+pw+6,y0+10); g.fillText(px(last.fpx),L+pw+6,y0+24); } }
+tag(g,L+pw+2,Math.max(T+9,Math.min(T+ph-9,ys(last.c))),px(last.c),last.d1>0?COL.g:last.d1<0?COL.r:'#555','#000',R-4);
+if(hov!=null) tip(P[hov],xs(hov),W); else $('tip').hidden=true; }
+function nice(x){ const p=Math.pow(10,Math.floor(Math.log10(x))), f=x/p; return (f<1.5?1:f<3?2:f<7?5:10)*p; }
+function tri(g,x,y,down,s,col,fill){ g.beginPath(); if(down){ g.moveTo(x-s,y-s*.8); g.lineTo(x+s,y-s*.8); g.lineTo(x,y+s*.8); } else { g.moveTo(x-s,y+s*.8); g.lineTo(x+s,y+s*.8); g.lineTo(x,y-s*.8); } g.closePath(); if(fill){ g.fillStyle=col; g.fill(); } else { g.strokeStyle=col; g.lineWidth=1.6; g.stroke(); g.lineWidth=1; } }
+function tag(g,x,y,txt,bg,fg,w){ g.font='bold 11px system-ui,sans-serif'; g.fillStyle=bg; g.fillRect(x,y-9,w,18); g.fillStyle=fg; g.textBaseline='middle'; g.fillText(txt,x+4,y); }
+function tip(e,x,W){ const t=$('tip'), z=e.envZ;
+t.innerHTML='<b>'+esc(hm(e.t))+'</b> (New York '+esc(nyhm.format(new Date(e.t*1000)))+')'+(e.live?' · minuto in corso':'')+'<br>Prezzo '+esc(px(e.c))+(e.fpx!=null?'<br>Giro a '+esc(px(e.fpx))+' · '+(e.mz!=null&&e.mz<0?'già superato di ':'')+esc(atr(e.mz))+' ATR':'')+
+(e.cat!=null&&z?'<br>Zona '+zTxt(z)+': '+esc(lett(e)):'')+(fin(e.dP)?'<br>Dist '+esc(dTxt(e))+' · punti al minuto '+esc(fv(e.v)):'')+(e.adx!=null&&e.adx<ADX_LAT?'<br>Mercato laterale (ADX '+fAdx(e.adx)+')':'');
+t.hidden=false; t.style.left='0px'; const w=t.offsetWidth; t.style.left=Math.max(4,Math.min(W-w-4,x+12))+'px'; }
+const itf=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
+const itStr=t=>{ const p={}; for(const x of itf.formatToParts(new Date(t*1000))) p[x.type]=x.value; return p.year+'-'+p.month+'-'+p.day+' '+p.hour+':'+p.minute; };
+const etStr=t=>{ const q=et(t); return q.day+' '+String(Math.floor(q.mod/60)).padStart(2,'0')+':'+String(q.mod%60).padStart(2,'0')+':00'; };
+const CSV_COL='epoch,utc,et,open,high,low,close,volume,ora_italia,stato,zona,zona_lettura,lettura,giro_px,dist_punti,dist_atr,punti_al_minuto,minuti_al_giro,forza_pine,punti_pine,adx,atr,possibile_giro,posizione,eventi';
+const CSV_LETT=['sta_girando','in_bilico','fragile','solido_a_favore','solido_fermo_o_contro'];
+function evEtichetta(ev){ const Z=z=>z>0?'LONG':z<0?'SHORT':'';
+const b=ev.type==='giro'?'giro_'+Z(ev.z):ev.type==='gira'?'sta_girando_'+Z(-ev.z):ev.type==='pre'?'in_bilico':ev.type==='poss'?'possibile_giro':ev.type==='lat'?(ev.on?'laterale_inizio':'laterale_fine')
+:ev.type==='op'?'cosa_fare_'+(ev.act==='entra'?'entra_'+Z(ev.pos):ev.act==='aspetta'?'aspetta_'+Z(ev.zz):'esci'):ev.type;
+return b+(ev.avvisato?(ev.muto?':striscia_muta':':avvisato'):ev.altraScheda?':altra_scheda':''); }
+function csvDati(){ const ks=[...F.bars.keys()].sort((a,b)=>a-b), byT=new Map(), evT=new Map(), posT=new Map(), f=(v,d)=>fin(v)?v.toFixed(d):'', Z=z=>z>0?'LONG':z<0?'SHORT':'';
+for(const e of F.ser) byT.set(e.t,e); if(F.live) byT.set(F.live.t,F.live);
+for(const ev of F.ev){ if(!evT.has(ev.t)) evT.set(ev.t,[]); evT.get(ev.t).push(evEtichetta(ev)); }
+if(F.op){ const E=F.op.ev.filter(x=>x.why!=='attendi'); let p=0, i=0; for(const e of F.ser){ while(i<E.length&&E[i].t<e.t) i++; while(i<E.length&&E[i].t===e.t){ p=E[i].pos; i++; } posT.set(e.t,p); } }
+const L=[CSV_COL];
+for(const t of ks){ const b=F.bars.get(t), e=byT.get(t)||null, pos=posT.has(t)?posT.get(t):null;
+L.push([t,new Date(t*1000).toISOString().replace('.000Z','Z'),etStr(t),b.o,b.h,b.l,b.c,'',itStr(t),b.ok?'chiuso':'in_corso',
+e?Z(e.zF):'',e&&e.smp?Z(e.envZ):'',e&&e.cat!=null?(perdeForza(e)?'perde_forza':CSV_LETT[e.cat]):'',e?f(e.fpx,4):'',e?f(e.dP,3):'',e?f(e.mz,3):'',e?f(e.v,4):'',e?(e.tau===0?'0':f(e.tau,1)):'',e?f(e.d5,1):'',e?f(e.p10,1):'',
+e?f(e.adx,2):'',e?f(e.atr,4):'',e?(e.poss?1:0):'',pos==null?'':pos>0?'LONG':pos<0?'SHORT':'fuori',(evT.get(t)||[]).join('|')].join(',')); }
+const q=itStr(Date.now()/1000).replace(/[- :]/g,''), nome='Giro_'+VERSIONE+'_'+ST.sym.replace(/[^A-Za-z0-9]/g,'_')+'_'+RULES[ST.rule]+'_'+ST.orari+'_'+q.slice(0,8)+'-'+q.slice(8)+'.csv';
+return {csv:L.join('\n')+'\n',nome,n:ks.length,da:ks[0],a:ks[ks.length-1]}; }
+function scaricaCsv(){ const info=$('csvInfo');
+if(!F.bars.size){ info.textContent='Nessun dato da scaricare: aspetta la prima lettura.'; return; }
+let r; try{ r=csvDati(); }catch(e){ info.textContent='Il file non si è potuto preparare: '+String(e&&e.message||e); return; }
+try{ const url=URL.createObjectURL(new Blob([r.csv],{type:'text/csv;charset=utf-8'})), a=document.createElement('a');
+a.href=url; a.download=r.nome; a.style.display='none'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),60000); }
+catch(e){ info.textContent='Questo browser non ha scaricato il file: '+String(e&&e.message||e); return; }
+info.textContent='Scaricato «'+r.nome+'»: '+r.n.toLocaleString('it-IT')+' minuti, dal '+itStr(r.da).slice(8,10)+'/'+itStr(r.da).slice(5,7)+' '+itStr(r.da).slice(11)+' al '+itStr(r.a).slice(8,10)+'/'+itStr(r.a).slice(5,7)+' '+itStr(r.a).slice(11)+' (ora italiana).'; }
+function init(){ const ss=$('sym'), sr=$('rule'), sw=$('win'), so=$('orari');
+const fill=(el,obj,val)=>{ el.innerHTML=Object.entries(obj).map(([k,v])=>'<option value="'+esc(k)+'">'+esc(v)+'</option>').join(''); el.value=String(val); };
+fill(ss,SYMS,ST.sym); fill(sr,RULES,ST.rule); fill(sw,WINS,ST.win); fill(so,ORARI,ST.orari);
+ss.addEventListener('change',()=>{ ST.sym=ss.value; lsSet('giro|sym',ST.sym); resetData(); });
+sr.addEventListener('change',()=>{ ST.rule=sr.value; lsSet('giro|rule',ST.rule); F.P=null; F.loaded=false; if(F.bars.size) calcola(); else render(); });
+sw.addEventListener('change',()=>{ ST.win=+sw.value; lsSet('giro|win',ST.win); F.hover=null; draw(); });
+so.addEventListener('change',()=>{ ST.orari=so.value; lsSet('giro|orari',ST.orari); F.opHist=F.lastMin; if(F.ser.length){ F.op=opMachine(F.ser); opStoria(); } render(); });
+const tp=$('tipi'); tp.innerHTML=Object.entries(TIPI).map(([k,v])=>'<label><input type="checkbox" value="'+k+'"'+(ST.tipi.has(k)?' checked':'')+'> '+esc(v)+'</label>').join('')+'<label><input type="checkbox" id="voce"'+(ST.voce?' checked':'')+'> Leggi a voce</label>';
+tp.addEventListener('change',ev=>{ const el=ev.target; if(el.id==='voce'){ ST.voce=el.checked; lsSet('giro|voce',ST.voce?'1':'0'); } else if(TIPI[el.value]){ if(el.checked) ST.tipi.add(el.value); else ST.tipi.delete(el.value); lsSet('giro|tipi',JSON.stringify([...ST.tipi])); } render(); });
+$('avvisi').addEventListener('click',enableAlerts); $('prova').addEventListener('click',()=>{ if(!AV.on) enableAlerts().then(provaAvviso); else provaAvviso(); });
+$('toastX').addEventListener('click',()=>{ $('toast').hidden=true; }); $('csv').addEventListener('click',scaricaCsv);
+const cv=$('ch'); const pos=ev=>{ const r=cv.getBoundingClientRect(), n=punti().length, k=r.width/Math.max(200,cv.parentElement.clientWidth), pw=(r.width/k)-GL-GR; const i=Math.round(((ev.clientX-r.left)/k-GL)/pw*(n-1)); return Math.max(0,Math.min(n-1,i)); };
+const scegli=ev=>{ const P=punti(); F.hover=P.length?P[pos(ev)].t:null; draw(); };
+cv.addEventListener('pointermove',scegli); cv.addEventListener('pointerdown',scegli);
+cv.addEventListener('pointerleave',ev=>{ if(ev.pointerType==='mouse'){ F.hover=null; draw(); } });
+document.addEventListener('pointerdown',ev=>{ if(F.hover!=null&&ev.target!==cv&&ev.pointerType!=='mouse'){ F.hover=null; draw(); } });
+window.addEventListener('resize',()=>draw());
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'){ keepAwake(); try{ if(AV.ac&&AV.ac.state!=='running') AV.ac.resume(); }catch(e){} clearTimeout(F.timer); if(!F.busy) poll(); } });
+setInterval(()=>{ const e=stato(); $('cd').textContent=cdText(); latRow(); opRender(); if(e&&e.cat===0&&e.envZ) $('badge').textContent=cdBadge(e); titolo(); },1000);
+setInterval(render,30000);
+render(); poll(); }
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();</script>
+</body></html>
